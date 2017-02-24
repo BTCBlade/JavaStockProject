@@ -19,28 +19,33 @@ import java.util.*;
 
 public class qoutes {
 
-    String tick;
+    ArrayList <Float> Open = new ArrayList();
+    ArrayList <Float> High = new ArrayList();
+    ArrayList <Float> Low = new ArrayList();
+    ArrayList <Float> Close = new ArrayList();
 
-    qoutes(String tick, int intervals, int days)
+    public qoutes(String tick, int intervals, int days)
     {
-        this.tick = tick;
-    }
-
-    private ArrayList <Float> rawdata()
-    {
-        ArrayList <Float> data = new ArrayList();
-
         try
         {
-            URL url = new URL("https://www.google.com/finance/getprices?q=" + tick + "&i=60&p=12d&f=0,h,l,c");
+            URL url = new URL("https://www.google.com/finance/getprices?q=" + tick + "&i=" + intervals + "&p=" + days + "d&f=o,h,l,c");
             URLConnection con = url.openConnection();
             InputStreamReader stream = new InputStreamReader(con.getInputStream());
             BufferedReader buff = new BufferedReader(stream);
 
             String line = buff.readLine();
+            String temp[];
+
+            for (int i = 0; i  < 7; i++)
+                line = buff.readLine();
+
             while (line != null)
             {
-                System.out.println(line);
+                temp = line.split(",");
+                Open.add(Float.parseFloat(temp[0]));
+                High.add(Float.parseFloat(temp[1]));
+                Low.add(Float.parseFloat(temp[2]));
+                Close.add(Float.parseFloat(temp[3]));
                 line = buff.readLine();
             }
         }
@@ -48,13 +53,34 @@ public class qoutes {
         {
             e.printStackTrace();
         }
-            return (data);
     }
 
-    public void test()
+    public ArrayList<Float> smoothed()
     {
-        ArrayList <Float> x = new ArrayList();
-        x = rawdata();
+        ArrayList <Float> temp = new ArrayList();
+        for (int i = 0; i < Open.size(); i++)
+            temp.add((Open.get(i) + Close.get(i) + High.get(i) + Low.get(i)) / 4);
+        return (temp);
+    }
+
+    public ArrayList<Float> open()
+    {
+        return (Open);
+    }
+
+    public ArrayList<Float> high()
+    {
+        return (High);
+    }
+
+    public ArrayList<Float> low()
+    {
+        return (Low);
+    }
+
+    public ArrayList<Float> close()
+    {
+        return (Close);
     }
 
     public void googleSearch(String searchTerm, int numberofResults)
@@ -75,34 +101,4 @@ public class qoutes {
             e.printStackTrace();
         }
     }
-
-    public float getcurrent () throws IOException
-    {
-        String ticker = "[\"" + tick + "\",";
-        URL url = new URL("https://www.google.com/finance?q=" + tick + "&ei=uZmvWNGABcax2AaQ1rvwDg");
-        URLConnection urlConn = url.openConnection();
-        InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
-        BufferedReader buff = new BufferedReader(inStream);
-
-        String sprice = "Not found";
-        String line = buff.readLine();
-        while (line != null)
-        {
-            if(line.contains(ticker))
-            {
-                int target = line.indexOf(ticker);
-                int deci = line.indexOf(".", target);
-                int start = deci;
-                while(line.charAt(start) != '\"')
-                {
-                    start--;
-                }
-                sprice = line.substring(start + 1, deci + 3);
-            }
-            line = buff.readLine();
-        }
-        return (Float.parseFloat(sprice));
-    }
-
-
 }

@@ -10,9 +10,13 @@ public class driver {
 
     public static void main(String [] args)
     {
-        ArrayList <Float> x = new ArrayList();
+        ArrayList <Float> smooth = new ArrayList();
 
-        qoutes price = new qoutes("SPY", 60, 1);
-        price.test();
+        qoutes data = new qoutes("SPY", 60, 1);
+
+        smooth = data.smoothed();
+        System.out.println(smooth);
+        data.googleSearch("Porn", 5);
+
     }
 }
