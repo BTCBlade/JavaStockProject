@@ -16,7 +16,7 @@ public class driver {
 
         smooth = data.smoothed();
         System.out.println(smooth);
-        data.googleSearch("Porn", 5);
+        data.googleSearch("Java", 5);
 
     }
 }

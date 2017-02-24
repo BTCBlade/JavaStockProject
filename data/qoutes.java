@@ -36,7 +36,7 @@ public class qoutes {
             String line = buff.readLine();
             String temp[];
 
-            for (int i = 0; i  < 7; i++)
+            for (int i = 0; i < 7; i++)
                 line = buff.readLine();
 
             while (line != null)
