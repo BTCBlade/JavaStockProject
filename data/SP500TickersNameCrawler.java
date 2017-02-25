@@ -21,24 +21,18 @@ public class SP500TickersNameCrawler {
             FileWriter fw = new FileWriter("./src/data/spyticks.txt", true);
 
             String line = buff.readLine();
-            String temp[] = new String[5000];
-            String temp2[] = new String[5000];
+            String temp[];
+            String temp2[];
 
             while (line != null) {
                 line = buff.readLine();
-                if (line.contains("<tr>")) {
+                if (line.contains("<tr>"))
+                {
                     line = buff.readLine();
-                    if (line != null) {
-                        temp = line.split(">");
-                        if (temp[1] == null) {
-                            System.out.println("blah");
-                        }
-                        if (temp[2] != null) {
-                            temp2 = temp[2].split("<");
-                            fw.write(temp2[0] + "\n");
-                            System.out.println(temp2[0]);
-                        }
-                    }
+                    temp = line.split(">");
+                    temp2 = temp[2].split("<");
+                    fw.write(temp2[0] + "\n");
+                    System.out.println(temp2[0]);
                 }
             }
         } catch (IOException e) {
