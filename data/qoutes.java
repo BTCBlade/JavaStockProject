@@ -28,6 +28,7 @@ public class qoutes {
     ArrayList <Float> High = new ArrayList();
     ArrayList <Float> Low = new ArrayList();
     ArrayList <Float> Close = new ArrayList();
+    ArrayList <Float> Volume = new ArrayList();
     String tick;
 
     public qoutes(String tick, int intervals, int days)
@@ -36,7 +37,7 @@ public class qoutes {
 
         try
         {
-            URL url = new URL("https://www.google.com/finance/getprices?q=" + tick + "&i=" + intervals + "&p=" + days + "d&f=o,h,l,c");
+            URL url = new URL("https://www.google.com/finance/getprices?q=" + tick + "&i=" + intervals + "&p=" + days + "d&f=o,h,l,c,v,");
             URLConnection con = url.openConnection();
             InputStreamReader stream = new InputStreamReader(con.getInputStream());
             BufferedReader buff = new BufferedReader(stream);
@@ -54,6 +55,7 @@ public class qoutes {
                 High.add(Float.parseFloat(temp[1]));
                 Low.add(Float.parseFloat(temp[2]));
                 Close.add(Float.parseFloat(temp[3]));
+                Volume.add(Float.parseFloat(temp[4]));
                 line = buff.readLine();
             }
         }
@@ -73,30 +75,36 @@ public class qoutes {
 
     public void save()
     {
-
-        String o,h,l,c;
+        int temp = 0;
+        String o,h,l,c,v;
         DateFormat df = new SimpleDateFormat("MM-dd-yy");
         Date dateobj = new Date();
-        try
-        {
 
-            FileWriter fw = new FileWriter("./src/data/pastdata/" + tick + "/" + df.format(dateobj) + ".csv",true);
-            for (int i = 0; i < Open.size(); i++)
-            {
-                o = String.valueOf(Open.get(i));
-                h = String.valueOf(High.get(i));
-                l = String.valueOf(Low.get(i));
-                c = String.valueOf(Close.get(i));
+        String indexs[] = {"DJI", "SPX", "NASDQ", "PENNY"};
 
-                fw.write(o + "," + h + "," + l + "," + c + "\n");
+        String ticks[] = {  "APPL", "BA", "CAT", "CSCO", "CVX", "KO", "DD",
+                            "XOM", "GE", "GS", "HD", "IBM", "INTC", "JNJ", "JPM",
+                            "MCD", "MMM", "MRK", "MSFT", "NKE", "PFE", "PG",
+                            "TRV", "UNH", "UTX", "V", "V2", "WMT", "DIS"};
+            try {
+
+                FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
+                fw.write("Open,High,Low,Close,Volume\n");
+                for (int i = 0; i < Open.size(); i++) {
+                    o = String.valueOf(Open.get(i));
+                    h = String.valueOf(High.get(i));
+                    l = String.valueOf(Low.get(i));
+                    c = String.valueOf(Close.get(i));
+                    v = String.valueOf((Volume.get(i)));
+
+                    fw.write(o + "," + h + "," + l + "," + c + "," + v + "\n");
+                    temp += 1;
+                }
+                fw.close();
+                System.out.println(temp);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            fw.close();
-            System.out.println("Done");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public float getCurrentprice()
