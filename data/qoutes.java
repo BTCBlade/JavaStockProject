@@ -80,11 +80,11 @@ public class qoutes {
         DateFormat df = new SimpleDateFormat("MM-dd-yy");
         Date dateobj = new Date();
 
-        String indexs[] = {"DJI", "SPX", "NASDQ", "PENNY"};
+        String indexs[] = {"SPX", "SPX", "NASDQ", "PENNY"};
 
         try {
 
-            FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/02-24-17.csv", true);
+            FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
             fw.write("Open,High,Low,Close,Volume\n");
             for (int i = 0; i < Open.size(); i++) {
                 o = String.valueOf(Open.get(i));
