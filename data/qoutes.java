@@ -82,29 +82,27 @@ public class qoutes {
 
         String indexs[] = {"DJI", "SPX", "NASDQ", "PENNY"};
 
-        String ticks[] = {  "APPL", "BA", "CAT", "CSCO", "CVX", "KO", "DD",
-                            "XOM", "GE", "GS", "HD", "IBM", "INTC", "JNJ", "JPM",
-                            "MCD", "MMM", "MRK", "MSFT", "NKE", "PFE", "PG",
-                            "TRV", "UNH", "UTX", "V", "V2", "WMT", "DIS"};
-            try {
+        try {
 
-                FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
-                fw.write("Open,High,Low,Close,Volume\n");
-                for (int i = 0; i < Open.size(); i++) {
-                    o = String.valueOf(Open.get(i));
-                    h = String.valueOf(High.get(i));
-                    l = String.valueOf(Low.get(i));
-                    c = String.valueOf(Close.get(i));
-                    v = String.valueOf((Volume.get(i)));
+            FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/02-24-17.csv", true);
+            fw.write("Open,High,Low,Close,Volume\n");
+            for (int i = 0; i < Open.size(); i++) {
+                o = String.valueOf(Open.get(i));
+                h = String.valueOf(High.get(i));
+                l = String.valueOf(Low.get(i));
+                c = String.valueOf(Close.get(i));
+                v = String.valueOf((Volume.get(i)));
 
-                    fw.write(o + "," + h + "," + l + "," + c + "," + v + "\n");
-                    temp += 1;
-                }
-                fw.close();
-                System.out.println(temp);
-            } catch (IOException e) {
-                e.printStackTrace();
+                fw.write(o + "," + h + "," + l + "," + c + "," + v + "\n");
+                temp += 1;
             }
+            fw.close();
+            System.out.println(tick + " : " + temp);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public float getCurrentprice()
