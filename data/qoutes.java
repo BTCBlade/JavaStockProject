@@ -10,12 +10,17 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class qoutes {
 
@@ -23,9 +28,12 @@ public class qoutes {
     ArrayList <Float> High = new ArrayList();
     ArrayList <Float> Low = new ArrayList();
     ArrayList <Float> Close = new ArrayList();
+    String tick;
 
     public qoutes(String tick, int intervals, int days)
     {
+        this.tick = tick;
+
         try
         {
             URL url = new URL("https://www.google.com/finance/getprices?q=" + tick + "&i=" + intervals + "&p=" + days + "d&f=o,h,l,c");
@@ -63,24 +71,68 @@ public class qoutes {
         return (temp);
     }
 
-    public ArrayList<Float> open()
+    public void save()
     {
-        return (Open);
+
+        String o,h,l,c;
+        DateFormat df = new SimpleDateFormat("MM-dd-yy");
+        Date dateobj = new Date();
+        try
+        {
+
+            FileWriter fw = new FileWriter("./src/data/pastdata/" + tick + "/" + df.format(dateobj) + ".csv",true);
+            for (int i = 0; i < Open.size(); i++)
+            {
+                o = String.valueOf(Open.get(i));
+                h = String.valueOf(High.get(i));
+                l = String.valueOf(Low.get(i));
+                c = String.valueOf(Close.get(i));
+
+                fw.write(o + "," + h + "," + l + "," + c + "\n");
+            }
+            fw.close();
+            System.out.println("Done");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    public ArrayList<Float> high()
+    public float getCurrentprice()
     {
-        return (High);
-    }
+        try
+        {
+            final String ticker = "[\"" + tick + "\",";
+            URL url = new URL("https://www.google.com/finance?q=" + tick + "&ei=uZmvWNGABcax2AaQ1rvwDg");
+            URLConnection urlConn = url.openConnection();
+            InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
+            BufferedReader buff = new BufferedReader(inStream);
 
-    public ArrayList<Float> low()
-    {
-        return (Low);
-    }
-
-    public ArrayList<Float> close()
-    {
-        return (Close);
+            String sprice = "Not found";
+            String line = buff.readLine();
+            while (line != null)
+            {
+                if(line.contains(ticker))
+                {
+                    int target = line.indexOf(ticker);
+                    int deci = line.indexOf(".", target);
+                    int start = deci;
+                    while(line.charAt(start) != '\"')
+                    {
+                        start--;
+                    }
+                    sprice = line.substring(start + 1, deci + 3);
+                }
+                line = buff.readLine();
+            }
+            return (Float.parseFloat(sprice));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return (0);
     }
 
     public void googleSearch(String searchTerm, int numberofResults)
@@ -100,5 +152,25 @@ public class qoutes {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Float> open()
+    {
+        return (Open);
+    }
+
+    public ArrayList<Float> high()
+    {
+        return (High);
+    }
+
+    public ArrayList<Float> low()
+    {
+        return (Low);
+    }
+
+    public ArrayList<Float> close()
+    {
+        return (Close);
     }
 }
