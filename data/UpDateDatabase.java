@@ -11,31 +11,43 @@ import java.io.IOException;
  */
 public class UpDateDatabase {
 
-    String indexs[] = {"DJI", "SPX", "NASDQ", "PENNY"};
-
-     String ticks[] = {  "AAPL", "BA", "CAT", "CSCO", "CVX", "KO", "DD",
-     "XOM", "GE", "GS", "HD", "IBM", "INTC", "JNJ", "JPM",
-     "MCD", "MMM", "MRK", "MSFT", "NKE", "PFE", "PG",
-     "TRV", "UNH", "UTX", "V", "VZ", "WMT", "DIS"};
+    static String index = "Null";
 
      public void update()
      {
          try
          {
-             FileReader fr = new FileReader("./src/data/spyticks.txt");
+             FileReader fr = new FileReader("./src/data/spxticks.txt");
+             FileReader fr2 = new FileReader("./src/data/dowticks.txt");
+             FileReader fr3 = new FileReader("./src/data/nasdaqticks.txt");
+
              BufferedReader buff = new BufferedReader(fr);
+             BufferedReader buff2 = new BufferedReader(fr2);
+             BufferedReader buff3 = new BufferedReader(fr3);
 
-             String tick[] = new String[505];
-
+             index = "SPX";
              for (int i = 0; i < 505; i++)
              {
-                 qoutes data = new qoutes(buff.readLine() ,60,1);
-                 data.save();
-                 System.out.println(tick[i]);
+                 qoutes spxdata = new qoutes(buff.readLine() ,60,1);
+                 spxdata.save();
              }
 
+             index = "DJI";
+             for (int i = 0; i < 30; i++)
+             {
+                 qoutes dowdata = new qoutes(buff2.readLine(), 60, 1);
+                 dowdata.save();
+             }
 
-         } catch (IOException e)
+             index = "NASDAQ";
+             for (int i = 0; i < 100; i++)
+             {
+                 qoutes nasdaqdata = new qoutes(buff3.readLine(), 60, 1);
+                 nasdaqdata.save();
+             }
+
+         }
+         catch (IOException e)
          {
              e.printStackTrace();
          }

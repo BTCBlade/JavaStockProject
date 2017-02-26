@@ -80,28 +80,27 @@ public class qoutes {
         DateFormat df = new SimpleDateFormat("MM-dd-yy");
         Date dateobj = new Date();
 
-        String indexs[] = {"SPX", "SPX", "NASDQ", "PENNY"};
-
-        try {
-
-            FileWriter fw = new FileWriter("./src/data/pastdata/" + indexs[0] + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
-            fw.write("Open,High,Low,Close,Volume\n");
-            for (int i = 0; i < Open.size(); i++) {
-                o = String.valueOf(Open.get(i));
-                h = String.valueOf(High.get(i));
-                l = String.valueOf(Low.get(i));
-                c = String.valueOf(Close.get(i));
-                v = String.valueOf((Volume.get(i)));
-
-                fw.write(o + "," + h + "," + l + "," + c + "," + v + "\n");
-                temp += 1;
-            }
-            fw.close();
-            System.out.println(tick + " : " + temp);
-        }
-        catch (IOException e)
+        if (tick != null)
         {
-            e.printStackTrace();
+            try {
+
+                FileWriter fw = new FileWriter("./src/data/pastdata/" + UpDateDatabase.index + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
+                fw.write("Open,High,Low,Close,Volume\n");
+                for (int i = 0; i < Open.size(); i++) {
+                    o = String.valueOf(Open.get(i));
+                    h = String.valueOf(High.get(i));
+                    l = String.valueOf(Low.get(i));
+                    c = String.valueOf(Close.get(i));
+                    v = String.valueOf((Volume.get(i)));
+
+                    fw.write(o + "," + h + "," + l + "," + c + "," + v + "\n");
+                    temp += 1;
+                }
+                fw.close();
+                System.out.println(tick + " : " + temp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
