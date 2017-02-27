@@ -21,7 +21,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
     JButton tenmin;
     JButton fiftenmin;
     JButton thritymin;
-    JPanel panel;
 
     private int width;
     private int height;
@@ -29,10 +28,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
     private double min = 0;
     private double xvalue = 0;
     private double yvalue = 0;
-    private boolean draw = false;
     private int numberofdays = 2;
     private int intervals = 60;
-
+    private boolean newchart = true;
     String tick;
     private ArrayList<Double> ypoints = new ArrayList();
 
@@ -65,7 +63,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         add(thritymin);
         init(x);
         repaint();
-        //time.start();
     }
 
     public JButton createButton(String name, int x, int interval, int days) {
@@ -91,21 +88,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         return (button);
     }
 
-    public void init(ArrayList<Float> data) {
-        ArrayList<Double> convert = new ArrayList();
-
-        max = maxValue(data);
-        min = minValue(data);
-        convert = minmax(data);
-
-        for (int i = 0; i < data.size(); i++)
-            ypoints.add((((400 * convert.get(i)) - 400) * -1) + 50);
-
-        xvalue = width / data.size();
-        yvalue = (maxValue(data) - minValue(data)) / 18;
-        repaint();
-        setVisible(true);
-    }
 
     private double maxValue(ArrayList<Float> array) {
         double max;
@@ -139,12 +121,25 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         return (x);
     }
 
-    private void putinfo(Graphics g2) {
-        int x;
+    public void init(ArrayList<Float> data) {
+        ArrayList<Double> convert = new ArrayList();
+
+        max = maxValue(data);
+        min = minValue(data);
+        convert = minmax(data);
+
+        for (int i = 0; i < data.size(); i++)
+            ypoints.add((((400 * convert.get(i)) - 400) * -1) + 50);
+
+        xvalue = width / data.size();
+        yvalue = (maxValue(data) - minValue(data)) / 20;
+        repaint();
+        setVisible(true);
+    }
+
+    private void putprice(Graphics g2) {
         double price;
 
-        x = 0;
-        price = 0;
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -156,7 +151,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
             g.fillRect(70, i, 5, 3);
             max -= yvalue;
         }
+    }
 
+    public void putline(Graphics2D g)
+    {
+        int x;
+
+        x = 0;
         g.setColor(Color.red);
         if (xvalue > 1)
         {
@@ -166,14 +167,20 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
             g.draw(new Line2D.Double(i + 80, ypoints.get(x), i + 80, ypoints.get(x + 1)));
             x++;
         }
+
     }
 
     public void paint(Graphics g2) {
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        System.out.println(newchart);
 
-        g.setColor(Color.black);
-        g.fillRect(0, 0, width, height);
+        if (newchart == true)
+        {
+            g.setColor(Color.black);
+            g.fillRect(0, 0, width, height);
+        }
+
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
@@ -183,7 +190,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
         g.fillRect(70, 50, 3, height - 100);
         g.fillRect(70, height - 50, width - 100, 3);
-        putinfo(g);
+        putprice(g);
+        putline(g);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -210,7 +218,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
                 init(data);
             }
         }
-
     }
 
     @Override
