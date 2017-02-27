@@ -1,9 +1,9 @@
 package graph;
 
+import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -14,13 +14,14 @@ import java.util.ArrayList;
 
 import data.qoutes;
 
-public class Graph extends JFrame implements ActionListener {
+public class Graph extends JFrame implements ActionListener, MouseListener {
 
     JButton onemin;
     JButton fivemin;
     JButton tenmin;
     JButton fiftenmin;
     JButton thritymin;
+    JPanel panel;
 
     private int width;
     private int height;
@@ -29,22 +30,26 @@ public class Graph extends JFrame implements ActionListener {
     private double xvalue = 0;
     private double yvalue = 0;
     private boolean draw = false;
-    private int numberofdays = 1;
+    private int numberofdays = 2;
+    private int intervals = 60;
 
     String tick;
     private ArrayList<Double> ypoints = new ArrayList();
-    // Timer time;
-    
-    Graph(String tick) {
+
+    Graph(String tick)
+    {
         width = 1000;
         height = 550;
         this.tick = tick;
 
         ArrayList <Float> x = new ArrayList();
-        qoutes data = new qoutes(tick,60,1);
+        qoutes data = new qoutes(tick,60,2);
         x = data.smoothed();
 
-        // time = new Timer(100,this);
+        setLayout(null);
+        setSize(width, height);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         onemin = createButton("1 Min", 70, 60, 2);
         fivemin = createButton("5 Min", 265, 300, 10);
@@ -52,16 +57,14 @@ public class Graph extends JFrame implements ActionListener {
         fiftenmin = createButton("15 Min", 645, 900, 30);
         thritymin = createButton("30 Min", 845, 1800, 50);
 
-        setLayout(null);
-        setSize(width, height);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addMouseListener(this);
         add(onemin, BorderLayout.PAGE_START);
         add(fivemin);
         add(tenmin);
         add(fiftenmin);
         add(thritymin);
         init(x);
+        repaint();
         //time.start();
     }
 
@@ -75,8 +78,8 @@ public class Graph extends JFrame implements ActionListener {
                 x = data.smoothed();
                 ypoints.clear();
                 numberofdays = days;
+                intervals = interval;
                 init(x);
-                repaint();
             }
         });
         button.setFocusPainted(false);
@@ -85,7 +88,6 @@ public class Graph extends JFrame implements ActionListener {
         button.setSize(110, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
-
         return (button);
     }
 
@@ -101,8 +103,7 @@ public class Graph extends JFrame implements ActionListener {
 
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 18;
-        draw = true;
-        super.repaint();
+        repaint();
         setVisible(true);
     }
 
@@ -149,10 +150,11 @@ public class Graph extends JFrame implements ActionListener {
 
         g.setColor(Color.white);
         for (int i = 50; i < height - 50; i += 20) {
-            price = max -= yvalue;
+            price = max;
             price = Math.round(price * 100.0) / 100.0;
             g.drawString(Double.toString((price)), 20, i + 8);
             g.fillRect(70, i, 5, 3);
+            max -= yvalue;
         }
 
         g.setColor(Color.red);
@@ -182,36 +184,45 @@ public class Graph extends JFrame implements ActionListener {
         g.fillRect(70, 50, 3, height - 100);
         g.fillRect(70, height - 50, width - 100, 3);
         putinfo(g);
-
-
-        /**
-         Graphics2D g2 = (Graphics2D) g;
-         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-         double i;
-         int x;
-         double temp;
-
-         i = ypoints.size() - 1 * xvalue;
-         x = ypoints.size() - 1;
-         temp = 0;
-
-         qoutes data = new qoutes("SPY", 60, 1);
-         temp = (data.getCurrentprice() - min) / (max - min);
-         temp = (((400 * temp) - 400) * -1) + 50;
-         g2.draw(new Line2D.Double(i + 80, ypoints.get(x), i + 80, temp));
-         ypoints.add(temp);
-
-         x++;
-         **/
     }
 
     public void actionPerformed(ActionEvent e) {
-        /**
-         qoutes data = new qoutes("SPY", 60, 1);
-         System.out.println(data.getCurrentprice());
-         repaint();
-         **/
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        ArrayList <Float> data = new ArrayList();
+        int x;
+        int y;
+
+        x = e.getX();
+        y = e.getY();
+
+        if (x > 70 && y < 500 && x < 970 && y > 50)
+        {
+            String name = JOptionPane.showInputDialog(this, "Ticker");
+            qoutes stuff = new qoutes(name, intervals, numberofdays);
+            data = stuff.smoothed();
+            if (!data.isEmpty())
+            {
+                ypoints.clear();
+                tick = name;
+                init(data);
+            }
+        }
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
 

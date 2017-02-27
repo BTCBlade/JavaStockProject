@@ -2,7 +2,6 @@ Current Data intake = 6.55714 megabytes/day.
 
 Get after-market and pre-marekt data!
 Build all Indicators that run fast. 
-Make Chart Display Correct Numbers.
-Implement mouse tracking on charts.
+Fixe buttons on Chart.
 Get more data.
 Get clean data.
