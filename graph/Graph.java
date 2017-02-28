@@ -36,9 +36,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private int numberofdays = 2;
     private int intervals = 60;
     String tick;
+<<<<<<< HEAD
     private ArrayList<Double> ypoints = new ArrayList <Double>();
     ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
+=======
+    private ArrayList<Double> ypoints = new ArrayList<Double> ();
+    ArrayList<ArrayList<Float>> indactors = new ArrayList <ArrayList<Float>>();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
     Timer time;
+	private static final long serialVersionUID = 714;
 
     public Graph(String tick)
     {
@@ -49,7 +55,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         time.start();
         setBackground(Color.black);
 
+<<<<<<< HEAD
         ArrayList <Double> x = new ArrayList <Double>();
+=======
+        ArrayList <Float> x = new ArrayList <Float> ();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
         qoutes data = new qoutes(tick,60,2);
         x = data.smoothed();
         init(x);
@@ -80,8 +90,12 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                     newchart = true;
                     ArrayList<Double> x = new ArrayList <Double>();
+=======
+                    ArrayList<Float> x = new  ArrayList<Float> ();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
                     qoutes data = new qoutes(tick, interval, days);
                     x = data.smoothed();
                     numberofdays = days;
@@ -93,10 +107,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setLocation(x, 515);
+        button.setLocation(x, height - (height - 500));
         button.setSize(110, 25);
         button.setBackground(Color.gray);
-        button.setForeground(Color.white);
+        button.setForeground(Color.black);
         return (button);
     }
 
@@ -129,8 +143,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         indactors.add(data);
     }
 
+<<<<<<< HEAD
     private ArrayList<Double> minmax(ArrayList<Double> data) {
         ArrayList<Double> x = new ArrayList <Double>();
+=======
+    private ArrayList<Double> minmax(ArrayList<Float> data) {
+        ArrayList<Double> x = new ArrayList <Double> ();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
 
         for (int i = 0; i < data.size(); i++)
             x.add((data.get(i) - min) / (max - min));
@@ -181,7 +200,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         x = 0;
         double test;
 
+<<<<<<< HEAD
         ArrayList <Double> convert = new ArrayList <Double> ();
+=======
+        ArrayList <Double> convert = new ArrayList <Double>();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
         g.setColor(Color.green);
         for (int ii = 0; ii < indactors.size(); ii++)
         {
@@ -207,8 +230,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     public ArrayList <Double> points(ArrayList <Double> data)
     {
+<<<<<<< HEAD
         ArrayList <Double> convert = new ArrayList <Double>();
         ArrayList <Double> points = new ArrayList <Double>();
+=======
+        ArrayList <Double> convert = new ArrayList <Double> ();
+        ArrayList <Double> points = new ArrayList <Double> ();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
 
         max = maxValue(data);
         min = minValue(data);
@@ -234,8 +262,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.fillRect(0, 0, width, height);
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-            g.drawString("Ticker: " + tick, 80, 25);
-            g.drawString("Days : " + numberofdays, 800, 25);
+            g.drawString("Ticker: " + tick, 80, height - (height - 35));
+            g.drawString("Days : " + numberofdays, 800, height - (height - 35));
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
             g.fillRect(70, 50, 3, height - 100);
@@ -254,12 +282,24 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             }
     }
 
+<<<<<<< HEAD
     public void actionPerformed(ActionEvent e) {;
+=======
+	public void paintComponent(Graphics g) {
+    /* your draw code here */
+   }
+
+    public void actionPerformed(ActionEvent e) {
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+<<<<<<< HEAD
         ArrayList <Double> data = new ArrayList <Double>();
+=======
+        ArrayList <Float> data = new ArrayList <Float>();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
         int x;
         int y;
 

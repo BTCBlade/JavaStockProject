@@ -4,12 +4,14 @@ package data;
   Created by klongrich on 2/23/17.
  **/
 
+/*
 import static org.jsoup.Jsoup.connect;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+*/
 
 import java.io.*;
 import java.net.URL;
@@ -24,11 +26,19 @@ import java.io.IOException;
 
 public class qoutes {
 
+<<<<<<< HEAD
     ArrayList <Double> Open = new ArrayList <Double>();
     ArrayList <Double> High = new ArrayList <Double>();
     ArrayList <Double> Low = new ArrayList <Double>();
     ArrayList <Double> Close = new ArrayList <Double>();
     ArrayList <Double> Volume = new ArrayList <Double>();
+=======
+    ArrayList <Float> Open = new ArrayList <Float>();
+    ArrayList <Float> High = new ArrayList <Float>();
+    ArrayList <Float> Low = new ArrayList <Float>();
+    ArrayList <Float> Close = new ArrayList <Float>();
+    ArrayList <Float> Volume = new ArrayList <Float>();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
     String tick;
 
     public qoutes(String tick, int intervals, int days)
@@ -67,7 +77,11 @@ public class qoutes {
 
     public ArrayList<Double> smoothed()
     {
+<<<<<<< HEAD
         ArrayList <Double> temp = new ArrayList <Double>();
+=======
+        ArrayList <Float> temp = new ArrayList <Float>();
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
         for (int i = 0; i < Open.size(); i++)
             temp.add((Open.get(i) + Close.get(i) + High.get(i) + Low.get(i)) / 4);
         return (temp);
@@ -139,6 +153,8 @@ public class qoutes {
         return (0);
     }
 
+	/*
+
     public void googleSearch(String searchTerm, int numberofResults)
     {
         String URL = "https://www.google.com/search";
@@ -158,7 +174,13 @@ public class qoutes {
         }
     }
 
+<<<<<<< HEAD
     public ArrayList<Double> open()
+=======
+	*/
+
+    public ArrayList<Float> open()
+>>>>>>> defb7495ce59c5adf6b0775c6f68a42a3b833808
     {
         return (Open);
     }
