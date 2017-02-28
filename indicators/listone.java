@@ -9,7 +9,7 @@ public class listone {
 
     public ArrayList<Float> sma(ArrayList<Float> data, int period)
     {
-        ArrayList <Float> answer = new ArrayList();
+        ArrayList <Float> answer = new ArrayList <Float> ();
         float temp;
 
         temp = 0;
