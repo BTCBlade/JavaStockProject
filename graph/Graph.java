@@ -47,7 +47,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
 
         setLayout(null);
         setSize(width, height);
-        setResizable(true);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         onemin = createButton("1 Min", 70, 60, 2);

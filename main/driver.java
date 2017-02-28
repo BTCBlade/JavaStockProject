@@ -18,7 +18,7 @@ public class driver {
         qoutes data = new qoutes("SPY", 60, 2);
 
         Graph chart = new Graph("SPY");
-        //chart.addIndicator(data.low());
+        //chart.addIndicator(inda.sma(data.low(), 50));
 
     }
 
