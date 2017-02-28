@@ -24,11 +24,11 @@ import java.io.IOException;
 
 public class qoutes {
 
-    ArrayList <Float> Open = new ArrayList();
-    ArrayList <Float> High = new ArrayList();
-    ArrayList <Float> Low = new ArrayList();
-    ArrayList <Float> Close = new ArrayList();
-    ArrayList <Float> Volume = new ArrayList();
+    ArrayList <Double> Open = new ArrayList <Double>();
+    ArrayList <Double> High = new ArrayList <Double>();
+    ArrayList <Double> Low = new ArrayList <Double>();
+    ArrayList <Double> Close = new ArrayList <Double>();
+    ArrayList <Double> Volume = new ArrayList <Double>();
     String tick;
 
     public qoutes(String tick, int intervals, int days)
@@ -51,11 +51,11 @@ public class qoutes {
             while (line != null)
             {
                 temp = line.split(",");
-                Open.add(Float.parseFloat(temp[0]));
-                High.add(Float.parseFloat(temp[1]));
-                Low.add(Float.parseFloat(temp[2]));
-                Close.add(Float.parseFloat(temp[3]));
-                Volume.add(Float.parseFloat(temp[4]));
+                Open.add(Double.parseDouble(temp[0]));
+                High.add(Double.parseDouble(temp[1]));
+                Low.add(Double.parseDouble(temp[2]));
+                Close.add(Double.parseDouble(temp[3]));
+                Volume.add(Double.parseDouble(temp[4]));
                 line = buff.readLine();
             }
         }
@@ -65,9 +65,9 @@ public class qoutes {
         }
     }
 
-    public ArrayList<Float> smoothed()
+    public ArrayList<Double> smoothed()
     {
-        ArrayList <Float> temp = new ArrayList();
+        ArrayList <Double> temp = new ArrayList <Double>();
         for (int i = 0; i < Open.size(); i++)
             temp.add((Open.get(i) + Close.get(i) + High.get(i) + Low.get(i)) / 4);
         return (temp);
@@ -83,7 +83,6 @@ public class qoutes {
         if (tick != null)
         {
             try {
-
                 FileWriter fw = new FileWriter("./src/data/pastdata/" + UpDateDatabase.index + "/" + tick + "/" + df.format(dateobj) + ".csv", true);
                 fw.write("Open,High,Low,Close,Volume\n");
                 for (int i = 0; i < Open.size(); i++) {
@@ -104,7 +103,7 @@ public class qoutes {
         }
     }
 
-    public float getCurrentprice()
+    public double getCurrentprice()
     {
         try
         {
@@ -131,7 +130,7 @@ public class qoutes {
                 }
                 line = buff.readLine();
             }
-            return (Float.parseFloat(sprice));
+            return (Double.parseDouble(sprice));
         }
         catch (IOException e)
         {
@@ -159,22 +158,22 @@ public class qoutes {
         }
     }
 
-    public ArrayList<Float> open()
+    public ArrayList<Double> open()
     {
         return (Open);
     }
 
-    public ArrayList<Float> high()
+    public ArrayList<Double> high()
     {
         return (High);
     }
 
-    public ArrayList<Float> low()
+    public ArrayList<Double> low()
     {
         return (Low);
     }
 
-    public ArrayList<Float> close()
+    public ArrayList<Double> close()
     {
         return (Close);
     }

@@ -8,9 +8,14 @@ import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+/**
+ * Created by klongrich on 2/23/17.
+ */
+
 import data.qoutes;
 
-public class Graph extends JFrame implements ActionListener, MouseListener {
+public class Graph extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
     JButton onemin;
     JButton fivemin;
@@ -18,17 +23,21 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
     JButton fiftenmin;
     JButton thritymin;
 
+    double yline = 0;
+    double xline = 0;
+    boolean newchart = true;
     private int width;
     private int height;
     private double max = 0;
+    double maxtemp = 0;
     private double min = 0;
     private double xvalue = 0;
     private double yvalue = 0;
     private int numberofdays = 2;
     private int intervals = 60;
     String tick;
-    private ArrayList<Double> ypoints = new ArrayList();
-    ArrayList<ArrayList<Float>> indactors = new ArrayList();
+    private ArrayList<Double> ypoints = new ArrayList <Double>();
+    ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
     Timer time;
 
     public Graph(String tick)
@@ -38,8 +47,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         this.tick = tick;
         time = new Timer(100, this);
         time.start();
+        setBackground(Color.black);
 
-        ArrayList <Float> x = new ArrayList();
+        ArrayList <Double> x = new ArrayList <Double>();
         qoutes data = new qoutes(tick,60,2);
         x = data.smoothed();
         init(x);
@@ -61,6 +71,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         add(thritymin);
 
         addMouseListener(this);
+        addMouseMotionListener(this);
         setVisible(true);
     }
 
@@ -69,13 +80,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                    ArrayList<Float> x = new ArrayList();
+                    newchart = true;
+                    ArrayList<Double> x = new ArrayList <Double>();
                     qoutes data = new qoutes(tick, interval, days);
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
                     init(x);
                     repaint();
+
             }
         });
         button.setFocusPainted(false);
@@ -87,7 +100,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         return (button);
     }
 
-    private double maxValue(ArrayList<Float> array) {
+    private double maxValue(ArrayList<Double> array) {
         double max;
 
         max = array.get(0);
@@ -99,7 +112,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         return (max);
     }
 
-    private double minValue(ArrayList<Float> array) {
+    private double minValue(ArrayList<Double> array) {
         double min;
 
         min = array.get(0);
@@ -111,33 +124,35 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         return (min);
     }
 
-    public void addIndicator( ArrayList<Float> data)
+    public void addIndicator( ArrayList<Double> data)
     {
         indactors.add(data);
     }
 
-    private ArrayList<Double> minmax(ArrayList<Float> data) {
-        ArrayList<Double> x = new ArrayList();
+    private ArrayList<Double> minmax(ArrayList<Double> data) {
+        ArrayList<Double> x = new ArrayList <Double>();
 
         for (int i = 0; i < data.size(); i++)
             x.add((data.get(i) - min) / (max - min));
         return (x);
     }
 
-    public void init(ArrayList<Float> data)
+    public void init(ArrayList<Double> data)
     {
-        ypoints = points(data);
-        xvalue = width / data.size();
-        yvalue = (maxValue(data) - minValue(data)) / 20;
+            ypoints = points(data);
+            xvalue = width / data.size();
+            yvalue = (maxValue(data) - minValue(data)) / 20;
     }
 
     private void putprice(Graphics g2) {
         double price;
+        double temp;
 
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setColor(Color.white);
+        maxtemp = max;
         for (int i = 50; i < height - 50; i += 20) {
             price = max;
             price = Math.round(price * 100.0) / 100.0;
@@ -145,6 +160,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
             g.fillRect(70, i, 5, 3);
             max -= yvalue;
         }
+        max = maxtemp;
     }
 
     public void putline(Graphics2D g)
@@ -157,30 +173,42 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
             xvalue = 1;
         }
         g.setColor(Color.red);
-        for (double i = 0; i < ypoints.size() - 1; i += xvalue) {
-            g.draw(new Line2D.Double(i + 80, ypoints.get(x), i + 80, ypoints.get(x + 1)));
+        for (double i = 80; i < ypoints.size() - 1; i += xvalue) {
+            g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
             x++;
         }
+        /*
         x = 0;
+        double test;
 
-        ArrayList <Double> convert = new ArrayList();
+        ArrayList <Double> convert = new ArrayList <Double> ();
         g.setColor(Color.green);
         for (int ii = 0; ii < indactors.size(); ii++)
         {
             convert = points(indactors.get(ii));
             x = 0;
-            for (double i = 0; i < convert.size() - 1; i += (width / ypoints.size())) {
+            if (ii == 1)
+            {
+                test = 20;
+                g.setColor(Color.blue);
+            }
+            else
+            {
+                test = 0;
+            }
+            for (double i = test; i < convert.size() - 1 + test; i += (width / ypoints.size())) {
                 g.draw(new Line2D.Double(i + 80, convert.get(x), i + 80, convert.get(x + 1)));
                 x++;
             }
         }
-        ypoints.clear();
+        //ypoints.clear();
+        */
     }
 
-    public ArrayList <Double> points(ArrayList <Float> data)
+    public ArrayList <Double> points(ArrayList <Double> data)
     {
-        ArrayList <Double> convert = new ArrayList();
-        ArrayList <Double> points = new ArrayList();
+        ArrayList <Double> convert = new ArrayList <Double>();
+        ArrayList <Double> points = new ArrayList <Double>();
 
         max = maxValue(data);
         min = minValue(data);
@@ -193,12 +221,17 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
     }
 
     public void paint(Graphics g2) {
+
+        g2.setColor(Color.black);
+        g2.fillRect(80,50,900,450);
+
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        if (newchart == true)
+        {
             g.setColor(Color.black);
             g.fillRect(0, 0, width, height);
-
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
             g.drawString("Ticker: " + tick, 80, 25);
@@ -207,16 +240,26 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
             g.fillRect(70, 50, 3, height - 100);
             g.fillRect(70, height - 50, width - 100, 3);
+
             putprice(g);
-        putline(g);
+            putline(g);
+        }
+
+           // putline(g);
+
+            g.setColor(Color.magenta);
+            if (xline > 80 && xline < 900 && yline < 500 && yline > 50) {
+                g.draw(new Line2D.Double(80.0, yline, 900, yline));
+                g.draw(new Line2D.Double(xline, 50, xline, 500));
+            }
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        ArrayList <Float> data = new ArrayList();
+        ArrayList <Double> data = new ArrayList <Double>();
         int x;
         int y;
 
@@ -238,14 +281,33 @@ public class Graph extends JFrame implements ActionListener, MouseListener {
         }
     }
 
+    public void mouseMoved(MouseEvent e) {
+       // System.out.println("X : " + e.getX() * xvalue);
+        //System.out.println("Y : " + (((((double)e.getY() - 50) / (500 - 50)) * max) - max) * -1);
+        if (e.getX() > 80 && e.getX() < 900 && e.getY() < 500 && e.getY() > 50) {
+            yline = (double) e.getY();
+            xline = (double) e.getX();
+            repaint();
+        }
+        newchart = false;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
     @Override
     public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+
+    }
 
     @Override
     public void mouseExited(MouseEvent e) {}
