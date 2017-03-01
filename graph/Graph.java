@@ -176,7 +176,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
             x++;
         }
-        /*
+      
         x = 0;
         double test;
 
@@ -200,8 +200,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 x++;
             }
         }
-        //ypoints.clear();
-        */
+        ypoints.clear();
     }
 
     public ArrayList <Double> points(ArrayList <Double> data)
@@ -244,15 +243,17 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             putline(g);
         }
 
-           // putline(g);
-
+            putline(g);
+		
+/*
             g.setColor(Color.magenta);
             if (xline > 80 && xline < 900 && yline < 500 && yline > 50)
             {
                 g.draw(new Line2D.Double(80.0, yline, 900, yline));
                 g.draw(new Line2D.Double(xline, 50, xline, 500));
             }
-    }
+*/   
+ 	}
 
     public void actionPerformed(ActionEvent e) {;
     }
@@ -277,6 +278,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 ypoints.clear();
                 tick = name;
                 init(data);
+		newchart = true;
                 repaint();
             }
         }
@@ -288,7 +290,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         if (e.getX() > 80 && e.getX() < 900 && e.getY() < 500 && e.getY() > 50) {
             yline = (double) e.getY();
             xline = (double) e.getX();
-            repaint();
+           // repaint();
         }
         newchart = false;
     }
