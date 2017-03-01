@@ -8,6 +8,7 @@ import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.awt.image.*;
 
 /**
  * Created by klongrich on 2/23/17.
@@ -39,6 +40,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private ArrayList<Double> ypoints = new ArrayList <Double>();
     ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
     Timer time;
+
+    ImageIcon icon;
 
     public Graph(String tick)
     {
@@ -86,7 +89,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
-                    init(x);
+                    icon = init(x);
                     repaint();
             }
         });
@@ -136,11 +139,29 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         return (x);
     }
 
-    public void init(ArrayList<Double> data)
+    public ImageIcon init(ArrayList<Double> data)
     {
-            ypoints = points(data);
-            xvalue = width / data.size();
-            yvalue = (maxValue(data) - minValue(data)) / 20;
+        ypoints = points(data);
+        xvalue = width / data.size();
+        yvalue = (maxValue(data) - minValue(data)) / 20;
+
+        BufferedImage image = new BufferedImage(800, 450, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g = (Graphics2D)image.getGraphics();
+        int x;
+
+        x = 0;
+        if (xvalue > 1)
+        {
+            xvalue = 1;
+        }
+        g.setColor(Color.red);
+        for (double i = 0; i < ypoints.size() - 1; i += xvalue) {
+            g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
+            x++;
+        }
+        ImageIcon icon = new ImageIcon(image);
+        return (icon);
+
     }
 
     private void putprice(Graphics g2) {
@@ -155,28 +176,19 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         for (int i = 50; i < height - 50; i += 20) {
             price = max;
             price = Math.round(price * 100.0) / 100.0;
-            g.drawString(Double.toString((price)), 20, i + 8);
-            g.fillRect(70, i, 5, 3);
+            g.drawString(Double.toString((price)), 920, i + 8);
+            g.fillRect(896, i, 5, 3);
             max -= yvalue;
         }
         max = maxtemp;
     }
 
+
     public void putline(Graphics2D g)
     {
+        /*
         int x;
 
-        x = 0;
-        if (xvalue > 1)
-        {
-            xvalue = 1;
-        }
-        g.setColor(Color.red);
-        for (double i = 80; i < ypoints.size() - 1; i += xvalue) {
-            g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
-            x++;
-        }
-      
         x = 0;
         double test;
 
@@ -200,7 +212,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 x++;
             }
         }
-        ypoints.clear();
+        //ypoints.clear();
+        */
     }
 
     public ArrayList <Double> points(ArrayList <Double> data)
@@ -213,7 +226,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         convert = minmax(data);
 
         for (int i = 0; i < data.size(); i++)
-            points.add((((400 * convert.get(i)) - 400) * -1) + 50);
+            points.add(((400 * convert.get(i)) - 400) * -1);
 
         return (points);
     }
@@ -221,7 +234,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public void paint(Graphics g2) {
 
         g2.setColor(Color.black);
-        g2.fillRect(80,50,900,450);
+        g2.fillRect(80,50,750,450);
 
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -230,30 +243,33 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         {
             g.setColor(Color.black);
             g.fillRect(0, 0, width, height);
+
+            //Putting the ticker name and period
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
             g.drawString("Ticker: " + tick, 80, 25);
             g.drawString("Days : " + numberofdays, 800, 25);
-
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
-            g.fillRect(70, 50, 3, height - 100);
-            g.fillRect(70, height - 50, width - 100, 3);
+
+            //y-axis
+            g.fillRect(900, 50, 3, height - 100);
+
+            //x-axis
+            g.fillRect(20, height - 50, width - 120, 3);
 
             putprice(g);
-            putline(g);
         }
 
-            putline(g);
-		
-/*
-            g.setColor(Color.magenta);
-            if (xline > 80 && xline < 900 && yline < 500 && yline > 50)
-            {
-                g.draw(new Line2D.Double(80.0, yline, 900, yline));
-                g.draw(new Line2D.Double(xline, 50, xline, 500));
-            }
-*/   
- 	}
+        if (icon != null)
+            icon.paintIcon(this, g, 95, 50);
+
+        g.setColor(Color.magenta);
+        if (xline > 75 && xline < 875 && yline < 500 && yline > 50)
+        {
+            g.draw(new Line2D.Double(75.0, yline, 875, yline));
+            g.draw(new Line2D.Double(xline, 50, xline, 498));
+        }
+    }
 
     public void actionPerformed(ActionEvent e) {;
     }
@@ -277,8 +293,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             {
                 ypoints.clear();
                 tick = name;
-                init(data);
-		newchart = true;
+                icon = init(data);
+                newchart = true;
                 repaint();
             }
         }
@@ -287,10 +303,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
        // System.out.println("X : " + e.getX() * xvalue);
         //System.out.println("Y : " + (((((double)e.getY() - 50) / (500 - 50)) * max) - max) * -1);
-        if (e.getX() > 80 && e.getX() < 900 && e.getY() < 500 && e.getY() > 50) {
+        if (e.getX() > 30 && e.getX() < 850 && e.getY() < 500 && e.getY() > 50) {
             yline = (double) e.getY();
             xline = (double) e.getX();
-           // repaint();
+            repaint();
         }
         newchart = false;
     }
