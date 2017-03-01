@@ -149,15 +149,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         Graphics2D g = (Graphics2D)image.getGraphics();
         int x;
 
-        x = 0;
+        x = ypoints.size() - 1;
         if (xvalue > 1)
         {
             xvalue = 1;
         }
         g.setColor(Color.red);
-        for (double i = 0; i < ypoints.size() - 1; i += xvalue) {
+        for (double i = 800; i > 800 - ypoints.size() + 1 ; i -= xvalue) {
+            x--;
             g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
-            x++;
         }
         ImageIcon icon = new ImageIcon(image);
         return (icon);
@@ -255,7 +255,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.fillRect(900, 50, 3, height - 100);
 
             //x-axis
-            g.fillRect(20, height - 50, width - 120, 3);
+            g.fillRect(20, height - 50, width - 117, 3);
 
             putprice(g);
         }
@@ -264,9 +264,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             icon.paintIcon(this, g, 95, 50);
 
         g.setColor(Color.magenta);
-        if (xline > 75 && xline < 875 && yline < 500 && yline > 50)
+        if (xline > 80 && xline < 890 && yline < 500 && yline > 50)
         {
-            g.draw(new Line2D.Double(75.0, yline, 875, yline));
+            g.draw(new Line2D.Double(80.0, yline, 890, yline));
             g.draw(new Line2D.Double(xline, 50, xline, 498));
         }
     }
@@ -303,7 +303,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
        // System.out.println("X : " + e.getX() * xvalue);
         //System.out.println("Y : " + (((((double)e.getY() - 50) / (500 - 50)) * max) - max) * -1);
-        if (e.getX() > 30 && e.getX() < 850 && e.getY() < 500 && e.getY() > 50) {
+        if (e.getX() > 80 && e.getX() < 890 && e.getY() < 500 && e.getY() > 50) {
             yline = (double) e.getY();
             xline = (double) e.getX();
             repaint();
