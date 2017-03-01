@@ -62,11 +62,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        onemin = createButton("1 Min", 70, 60, 2);
-        fivemin = createButton("5 Min", 265, 300, 10);
-        tenmin = createButton("10 Min", 465, 600, 20);
-        fiftenmin = createButton("15 Min", 645, 900, 30);
-        thritymin = createButton("30 Min", 845, 1800, 50);
+        onemin = createButton("1 Min", 790, 60, 2);
+        fivemin = createButton("5 Min", 600, 300, 10);
+        tenmin = createButton("10 Min", 420, 600, 20);
+        fiftenmin = createButton("15 Min", 220, 900, 30);
+        thritymin = createButton("30 Min", 30, 1800, 50);
         add(onemin, BorderLayout.PAGE_START);
         add(fivemin);
         add(tenmin);
@@ -144,20 +144,50 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ypoints = points(data);
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 20;
-
-        BufferedImage image = new BufferedImage(800, 450, BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D g = (Graphics2D)image.getGraphics();
         int x;
 
         x = ypoints.size() - 1;
-        if (xvalue > 1)
+
+        BufferedImage image = new BufferedImage(800, 450, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g = (Graphics2D)image.getGraphics();
+
+        for (int i = 0; i < 450; i += 20)
         {
-            xvalue = 1;
+            Color c =new Color(0.5803922f, 0.6f, 0.6392157f, 0.2f);
+            g.setColor(c);
+            g.drawLine(0, i, 900, i);
         }
+
+        if (xvalue > 1)
+            xvalue = 1;
         g.setColor(Color.red);
         for (double i = 800; i > 800 - ypoints.size() + 1 ; i -= xvalue) {
             x--;
             g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
+        }
+
+        double test;
+
+        ArrayList <Double> convert = new ArrayList <Double> ();
+        g.setColor(Color.green);
+        for (int ii = 0; ii < indactors.size(); ii++)
+        {
+            convert = points(indactors.get(ii));
+            x = convert.size() - 1;
+            if (ii == 1)
+            {
+                test = 20;
+                g.setColor(Color.blue);
+            }
+            else
+            {
+                test = 0;
+            }
+            System.out.println(x);
+            for (double i = 780; i > 780 - convert.size() + 1; i -= (width / convert.size())) {
+                x--;
+                g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
+            }
         }
         ImageIcon icon = new ImageIcon(image);
         return (icon);
@@ -166,7 +196,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     private void putprice(Graphics g2) {
         double price;
-        double temp;
 
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -183,38 +212,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         max = maxtemp;
     }
 
-
-    public void putline(Graphics2D g)
-    {
-        /*
-        int x;
-
-        x = 0;
-        double test;
-
-        ArrayList <Double> convert = new ArrayList <Double> ();
-        g.setColor(Color.green);
-        for (int ii = 0; ii < indactors.size(); ii++)
-        {
-            convert = points(indactors.get(ii));
-            x = 0;
-            if (ii == 1)
-            {
-                test = 20;
-                g.setColor(Color.blue);
-            }
-            else
-            {
-                test = 0;
-            }
-            for (double i = test; i < convert.size() - 1 + test; i += (width / ypoints.size())) {
-                g.draw(new Line2D.Double(i + 80, convert.get(x), i + 80, convert.get(x + 1)));
-                x++;
-            }
-        }
-        //ypoints.clear();
-        */
-    }
 
     public ArrayList <Double> points(ArrayList <Double> data)
     {
@@ -303,16 +300,16 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
        // System.out.println("X : " + e.getX() * xvalue);
         //System.out.println("Y : " + (((((double)e.getY() - 50) / (500 - 50)) * max) - max) * -1);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
         if (e.getX() > 80 && e.getX() < 890 && e.getY() < 500 && e.getY() > 50) {
             yline = (double) e.getY();
             xline = (double) e.getX();
             repaint();
         }
         newchart = false;
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
 
     }
 
@@ -321,6 +318,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        xline = -10;
+        yline = -10;
+        repaint();
     }
 
     @Override
