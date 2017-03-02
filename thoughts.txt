@@ -2,7 +2,10 @@ Current Data intake = 6.55714 megabytes/day.
 
 Get after-market and pre-marekt data!
 Build all Indicators that run fast. 
-Fixe buttons on Chart.
-Make chart an ImageIcon. Then paint it on.
+Fix buttons on Chart.
 Get more data.
 Get clean data.
+Make charts candle sticks.
+Build a stock scaner
+Make it possible to zoom in.
+create x-axis
