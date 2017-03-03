@@ -23,6 +23,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     JButton tenmin;
     JButton fiftenmin;
     JButton thritymin;
+    JButton addticker;
 
     double yline = 0;
     double xline = 0;
@@ -43,15 +44,21 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     ImageIcon icon;
 
+    watchlist list;
+
     public Graph(String tick)
     {
-        width = 1000;
+        width = 1250;
         height = 550;
         this.tick = tick;
         time = new Timer(100, this);
         time.start();
         setBackground(Color.black);
-
+        list = new watchlist();
+        list.addticker("SPY");
+        list.addticker("KO");
+        list.setLocation(960, 100);
+        add(list);
         ArrayList <Double> x = new ArrayList <Double>();
         qoutes data = new qoutes(tick,60,2);
         x = data.smoothed();
@@ -67,11 +74,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         tenmin = createButton("10 Min", 420, 600, 20);
         fiftenmin = createButton("15 Min", 220, 900, 30);
         thritymin = createButton("30 Min", 30, 1800, 50);
+        addticker = watchlistButton();
         add(onemin, BorderLayout.PAGE_START);
         add(fivemin);
         add(tenmin);
         add(fiftenmin);
         add(thritymin);
+        add(addticker);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -100,6 +109,32 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
+    }
+
+    public JButton watchlistButton()
+    {
+
+        JButton button = new JButton("+");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = JOptionPane.showInputDialog("Ticker", "");
+                list.addticker(name);
+                list.addticker("DOW");
+                list.addticker("KO");
+                list.addticker("FB");
+                list.addticker("GOOG");
+                repaint();
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1120, 60);
+        button.setSize(25, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+
     }
 
     private double maxValue(ArrayList<Double> array) {
@@ -205,8 +240,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         for (int i = 50; i < height - 50; i += 20) {
             price = max;
             price = Math.round(price * 100.0) / 100.0;
-            g.drawString(Double.toString((price)), 920, i + 8);
-            g.fillRect(896, i, 5, 3);
+            g.drawString(Double.toString((price)), 855, i + 8);
+            g.fillRect(831, i, 5, 3);
             max -= yvalue;
         }
         max = maxtemp;
@@ -243,13 +278,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
             //Putting the ticker name and period
             g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+            g.drawString("Watchlist", 960, 80);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-            g.drawString("Ticker: " + tick, 80, 25);
-            g.drawString("Days : " + numberofdays, 800, 25);
+            g.drawString("Ticker: " + tick, 50, 25);
+            g.drawString("Days : " + numberofdays, 730, 25);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
 
             //y-axis
-            g.fillRect(900, 50, 3, height - 100);
+            g.fillRect(835, 50, 3, height - 100);
 
             //x-axis
             g.fillRect(20, height - 50, width - 117, 3);
@@ -258,14 +295,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         }
 
         if (icon != null)
-            icon.paintIcon(this, g, 95, 50);
+            icon.paintIcon(this, g, 30, 50);
 
         g.setColor(Color.magenta);
-        if (xline > 80 && xline < 890 && yline < 500 && yline > 50)
+        if (xline > 15 && xline < 825 && yline < 500 && yline > 50)
         {
-            g.draw(new Line2D.Double(80.0, yline, 890, yline));
+            g.draw(new Line2D.Double(30.0, yline, 825, yline));
             g.draw(new Line2D.Double(xline, 50, xline, 498));
         }
+        list.repaint();
     }
 
     public void actionPerformed(ActionEvent e) {;
@@ -304,7 +342,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (e.getX() > 80 && e.getX() < 890 && e.getY() < 500 && e.getY() > 50) {
+        if (e.getX() > 30 && e.getX() < 825 && e.getY() < 500 && e.getY() > 50) {
             yline = (double) e.getY();
             xline = (double) e.getX();
             repaint();
