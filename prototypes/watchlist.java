@@ -1,8 +1,11 @@
 package testing;
 
+import data.qoutes;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  * Created by klongrich on 3/2/17.
@@ -10,8 +13,13 @@ import java.awt.event.*;
 public class watchlist extends JPanel implements MouseWheelListener, MouseMotionListener, MouseListener {
 
     int offset = 0;
+    ArrayList <String> names = new ArrayList<String>();
+    ArrayList <Double> change = new ArrayList<Double>();
+
     watchlist()
     {
+        JPanel x = new JPanel();
+
         setSize(200, 300);
         addMouseWheelListener(this);
         addMouseListener(this);
@@ -32,10 +40,17 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
 
     public void addticker(String tick)
     {
+        double move;
+        double last;
+        ArrayList <Double> data = new ArrayList<Double>();
+        qoutes x = new qoutes(tick, 60, 1);
+        data = x.close();
 
+        move = ((data.get(0) / data.get(data.size() - 1)) - 1) * -100;
+        names.add(tick);
+        change.add(move);
     }
-
-
+    
     public void paintComponent(Graphics g)
     {
         Color c =new Color(0x1E1E1E);
@@ -43,38 +58,27 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
         g.fillRect(0,0,200,300);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 
-        g.setColor(Color.white);
-        g.drawString("SPY", 30, offset);
-        g.setColor(Color.green);
-        g.drawString("33 %", 100, offset);
-        g.fillRect(0, offset + 20, 200, 3);
-
-        g.setColor(Color.white);
-        g.drawString("DOW", 30, offset + 50);
-        g.setColor(Color.red);
-        g.drawString("12 %", 100, offset + 50);
-        g.fillRect(0, offset + 70, 200, 3);
-
-
-        g.setColor(Color.white);
-        g.drawString("KO", 30, offset + 100);
-        g.setColor(Color.green);
-        g.drawString("4 %", 100, offset + 100);
-        g.fillRect(0, offset + 120, 200, 3);
-
+        for (int i = 0; i < names.size(); i++) {
+            g.setColor(Color.white);
+            g.drawString(names.get(i), 30, offset + i * 50);
+            if (change.get(i) > 0)
+                g.setColor(Color.green);
+            else
+                g.setColor(Color.red);
+            g.drawString(Double.toString(change.get(i)), 100, offset + i * 50);
+            g.fillRect(0, offset + 20 + (i * 50), 200, 3);
+        }
         putborder(200, 300, g);
-        //g.setColor(Color.black);
-        // g.fillRect(0,offset,50,50);
-    }
+     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         System.out.println(e.getWheelRotation());
 
         if (e.getWheelRotation() == 1)
-            offset -= 2;
+            offset -= 5;
         else
-            offset += 2;
+            offset += 5;
         repaint();
     }
 
