@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class watchlist extends JPanel implements MouseWheelListener, MouseMotionListener, MouseListener {
 
-    int offset = 30;
+    int offset = 25;
     ArrayList <String> names = new ArrayList<String>();
     ArrayList <Double> change = new ArrayList<Double>();
 
@@ -73,12 +73,27 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         System.out.println(offset);
-        
-            if (e.getWheelRotation() == 1)
-                offset -= 5;
-            else
+
+        double morespace;
+
+        morespace = 25 - ((names.size() - 6) * 55);
+        System.out.println(morespace);
+        if (e.getWheelRotation() == 1) {
+            if (names.size() > 6)
+            {
+                if (offset > morespace)
+                {
+                    offset -= 5;
+                }
+            }
+        }
+        else if(e.getWheelRotation() == -1)
+        {
+            if (offset <= 20) {
                 offset += 5;
-            repaint();
+            }
+        }
+        repaint();
     }
 
     @Override
