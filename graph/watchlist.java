@@ -4,6 +4,8 @@ import data.qoutes;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +39,15 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
         g.fillRect(x - width, 0, width, y);
     }
 
+    public void clear()
+    {
+        names.clear();
+        change.clear();
+        offset = 25;
+        repaint();
+    }
+
+
     public void addticker(String tick)
     {
         double move;
@@ -45,26 +56,37 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
         qoutes x = new qoutes(tick, 60, 1);
         data = x.close();
 
-        move = ((data.get(0) / data.get(data.size() - 1)) - 1) * -100;
-        names.add(tick);
-        change.add(move);
+        if (data.size() != 0) {
+            move = ((data.get(0) / data.get(data.size() - 1)) - 1) * -100;
+            names.add(tick);
+            change.add(move);
+        }
     }
 
-    public void paintComponent(Graphics g)
+    public void paintComponent(Graphics g2)
     {
+        Graphics2D g = (Graphics2D) g2;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        String pchange;
         Color c =new Color(0x1E1E1E);
         g.setColor(c);
         g.fillRect(0,0,200,300);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        NumberFormat formatter = new DecimalFormat("#0.0000");
+
 
         for (int i = 0; i < names.size(); i++) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
             g.setColor(Color.white);
-            g.drawString(names.get(i), 30, offset + i * 50);
+            g.drawString(names.get(i), 20, offset + i * 50);
             if (change.get(i) > 0)
                 g.setColor(Color.green);
             else
                 g.setColor(Color.red);
-            g.drawString(Double.toString(change.get(i)), 100, offset + i * 50);
+            pchange = formatter.format(change.get(i));
+            g.drawString(pchange, 115, offset + i * 50);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+            g.drawString(" %", 170, offset + i * 50);
             g.fillRect(0, offset + 20 + (i * 50), 200, 3);
         }
         putborder(200, 300, g);

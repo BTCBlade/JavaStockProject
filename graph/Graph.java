@@ -24,6 +24,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     JButton fiftenmin;
     JButton thritymin;
     JButton addticker;
+    JButton clearwatchlist;
 
     double yline = 0;
     double xline = 0;
@@ -43,7 +44,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     Timer time;
 
     ImageIcon icon;
-
     watchlist list;
 
     public Graph(String tick)
@@ -75,12 +75,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         fiftenmin = createButton("15 Min", 220, 900, 30);
         thritymin = createButton("30 Min", 30, 1800, 50);
         addticker = watchlistButton();
+        clearwatchlist = clearButton();
+
         add(onemin, BorderLayout.PAGE_START);
         add(fivemin);
         add(tenmin);
         add(fiftenmin);
         add(thritymin);
         add(addticker);
+        add(clearwatchlist);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -113,7 +116,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     public JButton watchlistButton()
     {
-
         JButton button = new JButton("+");
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
@@ -135,6 +137,25 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setForeground(Color.white);
         return (button);
 
+    }
+
+    public JButton clearButton()
+    {
+        JButton button = new JButton("Clear");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (list.names != null)
+                    list.clear();
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1000, 430);
+        button.setSize(100, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
     }
 
     private double maxValue(ArrayList<Double> array) {
@@ -219,7 +240,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 test = 0;
             }
             System.out.println(x);
-            for (double i = 780; i > 780 - convert.size() + 1; i -= (width / convert.size())) {
+            for (double i = 780 + test; i > 780 - convert.size() + 1 + test; i -= (width / convert.size())) {
                 x--;
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
             }
