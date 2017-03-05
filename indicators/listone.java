@@ -111,4 +111,70 @@ public class listone {
         }
         return (answer);
     }
+
+    public ArrayList<Double> bbupper(ArrayList <Double> data, int period, double multi)
+    {
+        ArrayList <Double> answer = new ArrayList<Double>();
+        double stdev;
+        double mean;
+        double ma;
+
+        stdev = 0;
+        mean = 0;
+        ma = 0;
+        for (int i = period; i < data.size(); i++)
+        {
+            mean = 0;
+            stdev = 0;
+            ma = 0;
+            for (int x = 0; x < period; x++)
+            {
+                mean += data.get(i - x);
+                ma += data.get(i - x);
+            }
+            mean /= period;
+            ma /= period;
+            for (int j = 0; j < period; j++)
+            {
+                stdev += (data.get(i - j) - mean) * (data.get(i - j) - mean);
+            }
+            stdev /= period;
+            stdev = Math.sqrt(stdev);
+            answer.add(ma + (multi * stdev));
+        }
+        return (answer);
+    }
+
+    public ArrayList <Double> bblower(ArrayList <Double> data, int period, double multi)
+    {
+        ArrayList <Double> answer = new ArrayList<Double>();
+        double stdev;
+        double mean;
+        double ma;
+
+        stdev = 0;
+        mean = 0;
+        ma = 0;
+        for (int i = period; i < data.size(); i++)
+        {
+            mean = 0;
+            stdev = 0;
+            ma = 0;
+            for (int x = 0; x < period; x++)
+            {
+                mean += data.get(i - x);
+                ma += data.get(i - x);
+            }
+            mean /= period;
+            ma /= period;
+            for (int j = 0; j < period; j++)
+            {
+                stdev += (data.get(i - j) - mean) * (data.get(i - j) - mean);
+            }
+            stdev /= period;
+            stdev = Math.sqrt(stdev);
+            answer.add(ma - (stdev * multi));
+        }
+        return (answer);
+    }
 }
