@@ -88,4 +88,27 @@ public class listone {
         }
         return (answer);
     }
+
+    //Room for speed up.
+    public ArrayList <Double> stoch(ArrayList <Double> data, int period)
+    {
+        ArrayList <Double> answer = new ArrayList <Double>();
+        double ll = data.get(0);
+        double hh = data.get(0);
+        double temp;
+
+        for (int i = period; i < data.size(); i++)
+        {
+            for (int x = 0; x < period; x++)
+            {
+                temp = data.get(i - x);
+                if (temp > hh)
+                    hh = temp;
+                if (temp < ll)
+                    ll = temp;
+            }
+            answer.add(((data.get(i) - ll) / (hh - ll)) * 100);
+        }
+        return (answer);
+    }
 }
