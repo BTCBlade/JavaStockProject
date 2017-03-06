@@ -1,6 +1,6 @@
 package data;
 
-//import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,9 +17,9 @@ public class UpDateDatabase {
      {
          try
          {
-             FileReader fr = new FileReader("./src/data/spxticks.txt");
-             FileReader fr2 = new FileReader("./src/data/dowticks.txt");
-             FileReader fr3 = new FileReader("./src/data/nasdaqticks.txt");
+             FileReader fr = new FileReader("./src/data/tickers/spxticks.txt");
+             FileReader fr2 = new FileReader("./src/data/tickers/dowticks.txt");
+             FileReader fr3 = new FileReader("./src/data/tickers/nasdaqticks.txt");
 
              BufferedReader buff = new BufferedReader(fr);
              BufferedReader buff2 = new BufferedReader(fr2);
