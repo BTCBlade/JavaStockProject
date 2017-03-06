@@ -18,14 +18,6 @@ import data.qoutes;
 
 public class Graph extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
-    JButton onemin;
-    JButton fivemin;
-    JButton tenmin;
-    JButton fiftenmin;
-    JButton thritymin;
-    JButton addticker;
-    JButton clearwatchlist;
-
     double yline = 0;
     double xline = 0;
     boolean newchart = true;
@@ -40,11 +32,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private int intervals = 60;
     String tick;
     private ArrayList<Double> ypoints = new ArrayList <Double>();
-    ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
+    static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
     Timer time;
 
     ImageIcon icon;
     watchlist list;
+    IndicatorPanel indicatorPanel;
+    qoutes data;
 
     public Graph(String tick)
     {
@@ -53,14 +47,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         this.tick = tick;
         time = new Timer(100, this);
         time.start();
-        setBackground(Color.black);
+
+
         list = new watchlist();
         list.addticker("SPY");
         list.addticker("KO");
         list.setLocation(960, 100);
         add(list);
         ArrayList <Double> x = new ArrayList <Double>();
-        qoutes data = new qoutes(tick,60,2);
+        data = new qoutes(tick,60,2);
         x = data.smoothed();
         init(x);
 
@@ -69,21 +64,14 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        onemin = createButton("1 Min", 790, 60, 2);
-        fivemin = createButton("5 Min", 600, 300, 10);
-        tenmin = createButton("10 Min", 420, 600, 20);
-        fiftenmin = createButton("15 Min", 220, 900, 30);
-        thritymin = createButton("30 Min", 30, 1800, 50);
-        addticker = watchlistButton();
-        clearwatchlist = clearButton();
-
-        add(onemin, BorderLayout.PAGE_START);
-        add(fivemin);
-        add(tenmin);
-        add(fiftenmin);
-        add(thritymin);
-        add(addticker);
-        add(clearwatchlist);
+        add(createButton("1 Min", 790, 60, 2), BorderLayout.PAGE_START);
+        add(createButton("5 Min", 600, 300, 10));
+        add(createButton("10 Min", 420, 600, 20));
+        add(createButton("15 Min", 220, 900, 30));
+        add(createButton("30 Min", 30, 1800, 50));
+        add(watchlistButton());
+        add(clearButton());
+        add(Indicators());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -97,7 +85,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             public void actionPerformed(ActionEvent e) {
                     newchart = true;
                     ArrayList<Double> x = new ArrayList <Double>();
-                    qoutes data = new qoutes(tick, interval, days);
+                    qoutes newdata = new qoutes(tick, interval, days);
+                    data = newdata;
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
@@ -122,10 +111,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             public void actionPerformed(ActionEvent e) {
                 String name = JOptionPane.showInputDialog("Ticker", "");
                 list.addticker(name);
-                list.addticker("DOW");
-                list.addticker("KO");
-                list.addticker("FB");
-                list.addticker("GOOG");
                 repaint();
             }
         });
@@ -158,6 +143,24 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         return (button);
     }
 
+    public JButton Indicators()
+    {
+        JButton button = new JButton("Indicators");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                indicatorPanel = new IndicatorPanel(data.smoothed());
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(400, 10);
+        button.setSize(100, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+
+    }
     private double maxValue(ArrayList<Double> array) {
         double max;
 
@@ -200,6 +203,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ypoints = points(data);
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 20;
+        min = minValue(data);
+        max = maxValue(data) + 1.2;
         int x;
 
         x = ypoints.size() - 1;
@@ -230,17 +235,12 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         {
             convert = points(indactors.get(ii));
             x = convert.size() - 1;
-            if (ii == 1)
+            if (ii == 2)
             {
-                test = 20;
                 g.setColor(Color.blue);
             }
-            else
-            {
-                test = 0;
-            }
             System.out.println(x);
-            for (double i = 780 + test; i > 780 - convert.size() + 1 + test; i -= (width / convert.size())) {
+            for (double i = 800; i > 780 - convert.size() + 21; i -= (width / convert.size())) {
                 x--;
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
             }
@@ -274,8 +274,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ArrayList <Double> convert = new ArrayList <Double>();
         ArrayList <Double> points = new ArrayList <Double>();
 
-        max = maxValue(data);
-        min = minValue(data);
+       // max = maxValue(data);
+        //min = minValue(data);
         convert = minmax(data);
 
         for (int i = 0; i < data.size(); i++)
