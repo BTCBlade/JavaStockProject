@@ -19,6 +19,8 @@ public class IndicatorPanel extends JFrame {
     static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
 
     boolean sma = false;
+    boolean ema = false;
+    boolean bb = false;
 
     IndicatorPanel(ArrayList<Double> data)
     {
@@ -30,7 +32,9 @@ public class IndicatorPanel extends JFrame {
         setLayout(new GridLayout(2, 2));
         x = new listone();
         add(SMA(init()));
-        //setVisible(true);
+        add(EMA(init()));
+        add(BB(init()));
+        add(CLEAR(init()));
     }
 
     public void upadate(ArrayList<Double> data)
@@ -38,11 +42,20 @@ public class IndicatorPanel extends JFrame {
         indactors.clear();
         if (sma)
             indactors.add(x.sma(data, 30));
+        if (ema)
+            indactors.add(x.ema(data, 5));
+        if (bb)
+        {
+            indactors.add(x.sma(data, 20));
+            indactors.add(x.bbupper(data, 20, 2));
+            indactors.add(x.bblower(data, 20, 2));
+
+        }
     }
 
     public JButton init()
     {
-        JButton button = new JButton("SMA");
+        JButton button = new JButton();
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
@@ -53,12 +66,51 @@ public class IndicatorPanel extends JFrame {
         return (button);
     }
 
+    public JButton CLEAR(JButton button)
+    {
+        button.setText("CLEAR");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                sma = false;
+                ema = false;
+                bb = false;
+            }
+        });
+        return (button);
+    }
+
     public JButton SMA(JButton button)
     {
+        button.setText("SMA");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 sma = true;
+            }
+        });
+        return (button);
+    }
+
+    public JButton EMA(JButton button)
+    {
+        button.setText("EMA");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                ema = true;
+            }
+        });
+        return (button);
+    }
+
+    public JButton BB(JButton button)
+    {
+        button.setText("BB");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                bb = true;
             }
         });
         return (button);
