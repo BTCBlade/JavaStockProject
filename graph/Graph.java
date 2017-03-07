@@ -37,13 +37,14 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     ImageIcon icon;
     watchlist list;
-    IndicatorPanel indicatorPanel;
+    Overlays OverlayPanel;
+    Indicators inda;
     qoutes data;
 
     public Graph(String tick)
     {
         width = 1250;
-        height = 550;
+        height = 710;
         this.tick = tick;
         time = new Timer(100, this);
         time.start();
@@ -53,27 +54,58 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         list.addticker("KO");
         list.setLocation(960, 100);
         add(list);
+
         ArrayList <Double> x = new ArrayList <Double>();
         data = new qoutes(tick,60,2);
         x = data.smoothed();
-        indicatorPanel = new IndicatorPanel(data.smoothed());
+        OverlayPanel = new Overlays(data.smoothed());
         init(x);
 
-        getContentPane().setBackground(Color.black);
+        inda = new Indicators("SPY");
 
+
+        getContentPane().setBackground(Color.black);
         setLayout(null);
         setSize(width, height);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        add(inda);
+        inda.setVisible(true);
+        inda.setLocation(25, 544);
+        /*
 
-        add(createButton("1 Min", 790, 60, 2), BorderLayout.PAGE_START);
-        add(createButton("5 Min", 600, 300, 10));
-        add(createButton("10 Min", 420, 600, 20));
-        add(createButton("15 Min", 220, 900, 30));
-        add(createButton("30 Min", 30, 1800, 50));
+        int offset;
+        int space;
+
+        offset = 40;
+        space = 80;
+        add(createButton("1 Min", offset, 60, 2), BorderLayout.PAGE_START);
+        offset += space;
+        add(createButton("5 Min", offset, 300, 10));
+        offset += space;
+        add(createButton("10 Min", offset, 600, 20));
+        offset += space;
+        add(createButton("15 Min", offset, 900, 30));
+        offset += space;
+        add(createButton("30 Min", offset, 1800, 50));
+        offset += space;
+         */
+        int offset = 25;
+        int space = 170;
+
+        add(createButton("30 Min", offset, 1800, 50));
+        offset += space;
+        add(createButton("15 Min", offset, 900, 30));
+        offset += space;
+        add(createButton("10 Min", offset, 600, 20));
+        offset += space;
+        add(createButton("5 Min", offset, 300, 10));
+        offset += space;
+        add(createButton("1 Min", offset, 60, 2));
+
         add(watchlistButton());
         add(clearButton());
-        add(Indicators());
+        add(Overlays());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -93,15 +125,16 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
-                    indicatorPanel.upadate(x);
-                    indactors = indicatorPanel.getinda();
+                    OverlayPanel.upadate(x);
+                    indactors = OverlayPanel.getinda();
+                    System.out.println(indactors.size());
                     icon = init(x);
                     repaint();
             }
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setLocation(x, 515);
+        button.setLocation(x, 509);
         button.setSize(110, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
@@ -126,7 +159,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
-
     }
 
     public JButton clearButton()
@@ -148,24 +180,25 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         return (button);
     }
 
-    public JButton Indicators()
+    public JButton Overlays()
     {
-        JButton button = new JButton("Indicators");
+        JButton button = new JButton("Super Awesome Overlays");
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                indicatorPanel.setVisible(true);
+                OverlayPanel.setVisible(true);
             }
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setLocation(400, 10);
-        button.setSize(100, 25);
+        button.setLocation(360, 10);
+        button.setSize(180, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
 
     }
+
     private double maxValue(ArrayList<Double> array) {
         double max;
 
@@ -197,7 +230,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     private ArrayList<Double> minmax(ArrayList<Double> data) {
         ArrayList<Double> x = new ArrayList <Double>();
-
         for (int i = 0; i < data.size(); i++)
             x.add((data.get(i) - min) / (max - min));
         return (x);
@@ -206,7 +238,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public ImageIcon init(ArrayList<Double> data)
     {
         min = minValue(data);
-        max = maxValue(data) + 1.2;
+        max = maxValue(data) + 1;
         ypoints = points(data);
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 20;
@@ -240,11 +272,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         {
             convert = points(indactors.get(ii));
             x = convert.size() - 1;
-            if (ii == 2)
+            if (ii == 1)
             {
                 g.setColor(Color.blue);
             }
-            System.out.println(x);
             for (double i = 800; i > 780 - convert.size() + 21; i -= (width / convert.size())) {
                 x--;
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
@@ -263,7 +294,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         g.setColor(Color.white);
         maxtemp = max;
-        for (int i = 50; i < height - 50; i += 20) {
+        for (int i = 50; i < 500; i += 20) {
             price = max;
             price = Math.round(price * 100.0) / 100.0;
             g.drawString(Double.toString((price)), 855, i + 8);
@@ -298,23 +329,26 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         {
             g.setColor(Color.black);
             g.fillRect(850, 48, 70, 450);
-            g.fillRect(50, 10, 90, 30);
-            g.fillRect(730,10,90, 30);
+            g.fillRect(50, 10, 110, 30);
+            g.fillRect(730,10,110, 30);
 
             //Putting the ticker name and period
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
             g.drawString("Watchlist", 960, 80);
+            g.drawString("Indicators", 960, 530);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
             g.drawString("Ticker: " + tick, 50, 25);
             g.drawString("Days : " + numberofdays, 730, 25);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
 
             //y-axis
-            g.fillRect(835, 50, 3, height - 100);
+            g.fillRect(835, 50, 3, 450);
+            g.fillRect(835, 540, 3, 168);
 
             //x-axis
-            g.fillRect(20, height - 50, width - 117, 3);
+            g.fillRect(20, 500, width - 90, 3);
+            g.fillRect(20, 540, width - 90, 3);
             putprice(g);
         }
 
@@ -352,8 +386,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             {
                 ypoints.clear();
                 tick = name;
-                indicatorPanel.upadate(data);
-                indactors = indicatorPanel.getinda();
+                OverlayPanel.upadate(data);
+                indactors = OverlayPanel.getinda();
                 icon = init(data);
                 newchart = true;
                 repaint();
