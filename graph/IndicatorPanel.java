@@ -16,6 +16,9 @@ public class IndicatorPanel extends JFrame {
 
     listone x;
     ArrayList <Double> data = new ArrayList <Double> ();
+    static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
+
+    boolean sma = false;
 
     IndicatorPanel(ArrayList<Double> data)
     {
@@ -26,22 +29,21 @@ public class IndicatorPanel extends JFrame {
         setBackground(Color.black);
         setLayout(new GridLayout(2, 2));
         x = new listone();
-        add(SMA());
-        add(SMA());
-        add(SMA());
-        add(SMA());
-        setVisible(true);
+        add(SMA(init()));
+        //setVisible(true);
     }
 
-    public JButton SMA()
+    public void upadate(ArrayList<Double> data)
+    {
+        indactors.clear();
+        if (sma)
+            indactors.add(x.sma(data, 30));
+    }
+
+    public JButton init()
     {
         JButton button = new JButton("SMA");
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
         button.setLocation(100, 100);
@@ -51,5 +53,19 @@ public class IndicatorPanel extends JFrame {
         return (button);
     }
 
+    public JButton SMA(JButton button)
+    {
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                sma = true;
+            }
+        });
+        return (button);
+    }
 
+    public ArrayList <ArrayList<Double>> getinda()
+    {
+        return(indactors);
+    }
 }

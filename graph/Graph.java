@@ -48,7 +48,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         time = new Timer(100, this);
         time.start();
 
-
         list = new watchlist();
         list.addticker("SPY");
         list.addticker("KO");
@@ -57,7 +56,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ArrayList <Double> x = new ArrayList <Double>();
         data = new qoutes(tick,60,2);
         x = data.smoothed();
+        indicatorPanel = new IndicatorPanel(data.smoothed());
         init(x);
+
+        getContentPane().setBackground(Color.black);
 
         setLayout(null);
         setSize(width, height);
@@ -78,6 +80,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         setVisible(true);
     }
 
+
     public JButton createButton(String name, int x, int interval, int days) {
         JButton button = new JButton(name);
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
@@ -90,6 +93,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
+                    indicatorPanel.upadate(x);
+                    indactors = indicatorPanel.getinda();
                     icon = init(x);
                     repaint();
             }
@@ -149,7 +154,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                indicatorPanel = new IndicatorPanel(data.smoothed());
+                indicatorPanel.setVisible(true);
             }
         });
         button.setFocusPainted(false);
@@ -200,11 +205,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     public ImageIcon init(ArrayList<Double> data)
     {
+        min = minValue(data);
+        max = maxValue(data) + 1.2;
         ypoints = points(data);
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 20;
-        min = minValue(data);
-        max = maxValue(data) + 1.2;
         int x;
 
         x = ypoints.size() - 1;
@@ -274,7 +279,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ArrayList <Double> convert = new ArrayList <Double>();
         ArrayList <Double> points = new ArrayList <Double>();
 
-       // max = maxValue(data);
+        //max = maxValue(data);
         //min = minValue(data);
         convert = minmax(data);
 
@@ -286,16 +291,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     public void paint(Graphics g2) {
 
-        g2.setColor(Color.black);
-        g2.fillRect(80,50,750,450);
-
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (newchart == true)
         {
             g.setColor(Color.black);
-            g.fillRect(0, 0, width, height);
+            g.fillRect(850, 48, 70, 450);
+            g.fillRect(50, 10, 90, 30);
+            g.fillRect(730,10,90, 30);
 
             //Putting the ticker name and period
             g.setColor(Color.WHITE);
@@ -311,7 +315,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
             //x-axis
             g.fillRect(20, height - 50, width - 117, 3);
-
             putprice(g);
         }
 
@@ -349,6 +352,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             {
                 ypoints.clear();
                 tick = name;
+                indicatorPanel.upadate(data);
+                indactors = indicatorPanel.getinda();
                 icon = init(data);
                 newchart = true;
                 repaint();
@@ -369,7 +374,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             repaint();
         }
         newchart = false;
-
     }
 
     @Override
