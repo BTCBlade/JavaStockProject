@@ -30,6 +30,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private double yvalue = 0;
     private int numberofdays = 2;
     private int intervals = 60;
+    static String parameters = "14";
+    String currentinda = "STOCH";
     String tick;
     private ArrayList<Double> ypoints = new ArrayList <Double>();
     static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
@@ -51,7 +53,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         list = new watchlist();
         list.addticker("SPY");
-        list.addticker("KO");
         list.setLocation(960, 100);
         add(list);
 
@@ -63,7 +64,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         inda = new Indicators("SPY");
 
-
         getContentPane().setBackground(Color.black);
         setLayout(null);
         setSize(width, height);
@@ -71,25 +71,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(inda);
         inda.setVisible(true);
-        inda.setLocation(25, 544);
-        /*
+        inda.setLocation(28, 544);
 
-        int offset;
-        int space;
-
-        offset = 40;
-        space = 80;
-        add(createButton("1 Min", offset, 60, 2), BorderLayout.PAGE_START);
-        offset += space;
-        add(createButton("5 Min", offset, 300, 10));
-        offset += space;
-        add(createButton("10 Min", offset, 600, 20));
-        offset += space;
-        add(createButton("15 Min", offset, 900, 30));
-        offset += space;
-        add(createButton("30 Min", offset, 1800, 50));
-        offset += space;
-         */
         int offset = 25;
         int space = 170;
 
@@ -106,12 +89,37 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         add(watchlistButton());
         add(clearButton());
         add(Overlays());
+        add(modifyInda());
+
+        int ofx;
+        int xrow;
+
+        ofx = 555;
+        xrow = 855;
+        add(indicat("RSI", "14", xrow, ofx));
+        add(indicat("MACD", "12, 14, 26", xrow,ofx + 30));
+        add(indicat("STOCH", "14", xrow, ofx + 60));
+        add(indicat("ADX", "14", xrow, ofx + 90));
+        add(indicat("OBV", "0", xrow, ofx + 120));
+
+        xrow += 120;
+        add(indicat("AROON", "14",  xrow, ofx));
+        add(indicat("DPO", "20", xrow,ofx + 30));
+        add(indicat("COPPOCK", "11, 16, 13", xrow, ofx + 60));
+        add(indicat("ATR", "14",  xrow, ofx + 90));
+        add(indicat("ROC", "14",  xrow, ofx + 120));
+
+        xrow += 120;
+        add(indicat("%B", "10", xrow, ofx));
+        add(indicat("%R", "20", xrow,ofx + 30));
+        add(indicat("TSI", "14, 12, 26", xrow, ofx + 60));
+        add(indicat("PVO", "14", xrow, ofx + 90));
+        add(indicat("McClellan", "Unkown", xrow, ofx + 120));
 
         addMouseListener(this);
         addMouseMotionListener(this);
         setVisible(true);
     }
-
 
     public JButton createButton(String name, int x, int interval, int days) {
         JButton button = new JButton(name);
@@ -123,12 +131,14 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     qoutes newdata = new qoutes(tick, interval, days);
                     data = newdata;
                     x = data.smoothed();
+                    inda.update(currentinda, parameters, data.close());
                     numberofdays = days;
                     intervals = interval;
                     OverlayPanel.upadate(x);
-                    indactors = OverlayPanel.getinda();
-                    System.out.println(indactors.size());
                     icon = init(x);
+                    System.out.println(currentinda);
+                    System.out.println(parameters);
+                  System.out.println();
                     repaint();
             }
         });
@@ -155,6 +165,24 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
         button.setLocation(1120, 60);
+        button.setSize(25, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+    }
+
+    public JButton modifyInda()
+    {
+        JButton button = new JButton("+");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1130, 510);
         button.setSize(25, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
@@ -199,6 +227,28 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     }
 
+    public JButton indicat(String name, String values, int x, int y)
+    {
+        JButton button = new JButton(name);
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (values != "0")
+                    parameters = JOptionPane.showInputDialog(name, values);
+                System.out.println("Bot: " + name);
+                System.out.println("Bot: " + parameters);
+                inda.update(name, parameters, data.close());
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(x, y);
+        button.setSize(100, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+    }
+
     private double maxValue(ArrayList<Double> array) {
         double max;
 
@@ -238,7 +288,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     public ImageIcon init(ArrayList<Double> data)
     {
         min = minValue(data);
-        max = maxValue(data) + 1;
+        max = maxValue(data);
         ypoints = points(data);
         xvalue = width / data.size();
         yvalue = (maxValue(data) - minValue(data)) / 20;
@@ -362,6 +412,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.draw(new Line2D.Double(xline, 50, xline, 498));
         }
         list.repaint();
+        inda.repaint();
     }
 
     public void actionPerformed(ActionEvent e) {;
