@@ -11,7 +11,6 @@ import java.util.ArrayList;
 /**
  * Created by klongrich on 3/2/17.
  */
-
 public class watchlist extends JPanel implements MouseWheelListener, MouseMotionListener, MouseListener {
 
     int offset = 25;
@@ -50,16 +49,12 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
     {
         double move;
 
-        livetickers live = new livetickers(tick);
-        live.volume();
         ArrayList <Double> data = new ArrayList<Double>();
         qoutes x = new qoutes(tick, 60, 1);
         data = x.close();
-
-        System.out.println(live.price());
-        System.out.println(live.yesterdayClose());
-        if (data.size() != 0) {
-            move = ((live.price()/ live.yesterdayClose()) - 1) * -100;
+        if (data.size() != 0)
+        {
+            move = 0.1841;
             names.add(tick);
             change.add(move);
         }

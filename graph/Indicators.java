@@ -22,10 +22,13 @@ public class Indicators extends JPanel{
     double width;
     ImageIcon icon;
     listtwo x;
+    listone y;
+    ArrayList <ArrayList<Double>> extras = new ArrayList<ArrayList<Double>>();
 
     Indicators(String name)
     {
         x = new listtwo();
+        y = new listone();
         qoutes data = new qoutes(name, 300, 10);
         width = 836;
         icon = init(x.stoch(data.close(), 20));
@@ -34,16 +37,21 @@ public class Indicators extends JPanel{
         setVisible(true);
     }
 
-    public void update(String name, String parameters, ArrayList <Double>data)
+    public void update(String name, String parameters, qoutes info)
     {
-
+        ArrayList <Double> data = new ArrayList();
         String temp[];
         int p1 = 0;
         int p2 = 0;
         int p3 = 0;
 
+        data = info.close();
         if (parameters != null) {
+            this.name = name;
+            this.parameters = parameters;
             temp = parameters.split(",");
+
+            //Parsing numbers
             if (temp.length == 1) {
                 p1 = Integer.parseInt(temp[0]);
             } else if (temp.length == 2) {
@@ -54,12 +62,30 @@ public class Indicators extends JPanel{
                 p2 = Integer.parseInt(temp[1]);
                 p3 = Integer.parseInt(temp[2]);
             }
-            this.name = name;
-            this.parameters = parameters;
+
+            //Redrawing chart
             if (name == "STOCH")
+            {
+                extras.add(y.sma(x.stoch(data, p1), p2));
                 icon = init(x.stoch(data, p1));
+            }
             else if (name == "MACD")
+            {
+                extras.add(y.ema(x.macd(data, p1, p2), p3));
                 icon = init(x.macd(data, p1, p2));
+            }
+            else if (name == "RSI")
+            {
+                icon = init(x.rsi(data, p1));
+            }
+            else if (name == "ADX")
+            {
+
+            }
+            else if (name == "OBV")
+            {
+                icon = init(x.obv(data, info.volume()));
+            }
 
             repaint();
         }
@@ -95,26 +121,6 @@ public class Indicators extends JPanel{
             x.add((data.get(i) - min) / (max - min));
         return (x);
     }
-
-    /*
-    private void putprice(Graphics g2) {
-        double price;
-
-        Graphics2D g = (Graphics2D) g2;
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g.setColor(Color.white);
-        maxtemp = max;
-        for (int i = 0; i < 160; i += 10) {
-            price = max;
-            price = Math.round(price * 100.0) / 100.0;
-            //g.drawString(Double.toString((price)), 823, i + 8);
-            g.fillRect(802, i, 5, 2);
-            max -= yvalue;
-        }
-        max = maxtemp;
-    }
-    */
 
     public ArrayList <Double> getconvertedpoints(ArrayList <Double> data)
     {
@@ -170,17 +176,33 @@ public class Indicators extends JPanel{
             g.draw(new Line2D.Double(i, ypoints.get(x) + 35, i , ypoints.get(x + 1) + 35));
         }
 
-        g.drawString(name + "(" + parameters + ")" , 10, 20);
+        //Drawing extras, signal lines, extc....
+        if (extras.size() > 0) {
+            g.setColor(Color.green);
+            ArrayList<Double> temp = new ArrayList<Double>();
+            temp = extras.get(0);
+            temp = getconvertedpoints(temp);
+            x = temp.size() - 1;
+            for (double i = 800; i > 800 - temp.size() + 1; i -= xvalue) {
+                x--;
+                g.draw(new Line2D.Double(i, temp.get(x) + 35, i, temp.get(x + 1) + 35));
+            }
+            extras.clear();
+        }
+
+        //Drawing paramter values
+        System.out.println(parameters);
+        if (parameters == "0")
+            g.drawString(name, 10, 20);
+        else
+            g.drawString(name + "(" + parameters + ")" , 10, 20);
+
         ImageIcon icon = new ImageIcon(image);
         return (icon);
-
     }
 
     public void paintComponent(Graphics g)
     {
         icon.paintIcon(this, g, 0, 0);
-        //putprice(g);
     }
-
-
 }

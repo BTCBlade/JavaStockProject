@@ -30,7 +30,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private double yvalue = 0;
     private int numberofdays = 2;
     private int intervals = 60;
-    static String parameters = "14";
+    static String parameters = "14,3";
     String currentinda = "STOCH";
     String tick;
     private ArrayList<Double> ypoints = new ArrayList <Double>();
@@ -97,8 +97,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ofx = 555;
         xrow = 855;
         add(indicat("RSI", "14", xrow, ofx));
-        add(indicat("MACD", "12,14,26", xrow,ofx + 30));
-        add(indicat("STOCH", "14", xrow, ofx + 60));
+        add(indicat("MACD", "12,26,9", xrow,ofx + 30));
+        add(indicat("STOCH", "14,3", xrow, ofx + 60));
         add(indicat("ADX", "14", xrow, ofx + 90));
         add(indicat("OBV", "0", xrow, ofx + 120));
 
@@ -133,7 +133,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     x = data.smoothed();
                     numberofdays = days;
                     intervals = interval;
-                    inda.update(currentinda, parameters, data.close());
+                    inda.update(currentinda, parameters, data);
                     OverlayPanel.upadate(x);
                     icon = init(x);
                     repaint();
@@ -232,7 +232,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             public void actionPerformed(ActionEvent e) {
                 if (values != "0")
                     parameters = JOptionPane.showInputDialog(type, values);
-                inda.update(type, parameters, data.close());
+                else
+                    parameters = "0";
+                inda.update(type, parameters, data);
                 currentinda = type;
             }
         });
@@ -310,7 +312,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ArrayList <Double> convert = new ArrayList <Double> ();
         g.setColor(Color.green);
         indactors = OverlayPanel.indactors;
-        System.out.println(indactors.size());
         for (int ii = 0; ii < indactors.size(); ii++)
         {
             convert = points(indactors.get(ii));
@@ -324,6 +325,15 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
             }
         }
+        g.setColor(Color.white);
+        for (int i = 0; i < 800; i++)
+        {
+            if (i % 78 == 0)
+            {
+                g.fillRect(i, 445, 2, 5);
+            }
+        }
+
         ImageIcon icon = new ImageIcon(image);
         return (icon);
 
@@ -432,7 +442,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 tick = name;
                 OverlayPanel.upadate(data);
                 indactors = OverlayPanel.getinda();
-                inda.update(currentinda, parameters, stuff.close());
+                inda.update(currentinda, parameters, stuff);
                 icon = init(data);
                 newchart = true;
                 repaint();
