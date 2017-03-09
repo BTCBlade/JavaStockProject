@@ -51,4 +51,47 @@ public class listtwo {
         }
         return (answer);
     }
+
+    public ArrayList <Double> rsi(ArrayList <Double> data, int period)
+    {
+        ArrayList <Double> answer = new ArrayList<Double>();
+        double gain;
+        double loss;
+        double rs;
+        double change;
+
+        for (int i = period; i < data.size(); i++)
+        {
+            gain = 0;
+            loss = 0;
+            for (int x = 0; x < period - 1; x++) {
+                if (data.get(i - x) > data.get(i - x - 1))
+                    gain += data.get(i - x);
+                else
+                    loss += data.get(i - x);
+            }
+            gain /= (double)period;
+            loss /= (double)period;
+            rs = gain / loss;
+            answer.add(100 - (100/( rs + 1)));
+        }
+        return (answer);
+    }
+
+    public ArrayList <Double> obv(ArrayList <Double> data, ArrayList <Double> volume)
+    {
+        ArrayList <Double> answer = new ArrayList <Double>();
+        double temp;
+
+        temp = 0;
+        for (int i = 1; i < data.size(); i++)
+        {
+            if (data.get(i) > data.get(i - 1))
+                temp += volume.get(i);
+            else
+                temp -= volume.get(i);
+            answer.add(temp);
+        }
+        return (answer);
+    }
 }
