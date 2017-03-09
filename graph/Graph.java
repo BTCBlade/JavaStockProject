@@ -97,7 +97,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         ofx = 555;
         xrow = 855;
         add(indicat("RSI", "14", xrow, ofx));
-        add(indicat("MACD", "12, 14, 26", xrow,ofx + 30));
+        add(indicat("MACD", "12,14,26", xrow,ofx + 30));
         add(indicat("STOCH", "14", xrow, ofx + 60));
         add(indicat("ADX", "14", xrow, ofx + 90));
         add(indicat("OBV", "0", xrow, ofx + 120));
@@ -105,14 +105,14 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         xrow += 120;
         add(indicat("AROON", "14",  xrow, ofx));
         add(indicat("DPO", "20", xrow,ofx + 30));
-        add(indicat("COPPOCK", "11, 16, 13", xrow, ofx + 60));
+        add(indicat("COPPOCK", "11,16,13", xrow, ofx + 60));
         add(indicat("ATR", "14",  xrow, ofx + 90));
         add(indicat("ROC", "14",  xrow, ofx + 120));
 
         xrow += 120;
         add(indicat("%B", "10", xrow, ofx));
         add(indicat("%R", "20", xrow,ofx + 30));
-        add(indicat("TSI", "14, 12, 26", xrow, ofx + 60));
+        add(indicat("TSI", "14,12,26", xrow, ofx + 60));
         add(indicat("PVO", "14", xrow, ofx + 90));
         add(indicat("McClellan", "Unkown", xrow, ofx + 120));
 
@@ -131,14 +131,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                     qoutes newdata = new qoutes(tick, interval, days);
                     data = newdata;
                     x = data.smoothed();
-                    inda.update(currentinda, parameters, data.close());
                     numberofdays = days;
                     intervals = interval;
+                    inda.update(currentinda, parameters, data.close());
                     OverlayPanel.upadate(x);
                     icon = init(x);
-                    System.out.println(currentinda);
-                    System.out.println(parameters);
-                  System.out.println();
                     repaint();
             }
         });
@@ -227,17 +224,16 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
     }
 
-    public JButton indicat(String name, String values, int x, int y)
+    public JButton indicat(String type, String values, int x, int y)
     {
-        JButton button = new JButton(name);
+        JButton button = new JButton(type);
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (values != "0")
-                    parameters = JOptionPane.showInputDialog(name, values);
-                System.out.println("Bot: " + name);
-                System.out.println("Bot: " + parameters);
-                inda.update(name, parameters, data.close());
+                    parameters = JOptionPane.showInputDialog(type, values);
+                inda.update(type, parameters, data.close());
+                currentinda = type;
             }
         });
         button.setFocusPainted(false);
@@ -271,11 +267,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             }
         }
         return (min);
-    }
-
-    public void addIndicator( ArrayList<Double> data)
-    {
-        indactors.add(data);
     }
 
     private ArrayList<Double> minmax(ArrayList<Double> data) {
@@ -318,6 +309,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         ArrayList <Double> convert = new ArrayList <Double> ();
         g.setColor(Color.green);
+        indactors = OverlayPanel.indactors;
+        System.out.println(indactors.size());
         for (int ii = 0; ii < indactors.size(); ii++)
         {
             convert = points(indactors.get(ii));
@@ -439,6 +432,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 tick = name;
                 OverlayPanel.upadate(data);
                 indactors = OverlayPanel.getinda();
+                inda.update(currentinda, parameters, stuff.close());
                 icon = init(data);
                 newchart = true;
                 repaint();
