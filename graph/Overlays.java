@@ -41,7 +41,7 @@ public class Overlays extends JFrame {
         if (sma)
             indactors.add(x.sma(data, 30));
         if (ema)
-            indactors.add(x.ema(data, 5));
+            indactors.add(x.ema(data, 21));
         if (bb)
         {
             indactors.add(x.sma(data, 20));

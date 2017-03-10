@@ -43,8 +43,11 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     Indicators inda;
     qoutes data;
 
+    LivePricepanel blah = new LivePricepanel("spy");
     public Graph(String tick)
     {
+        blah.setLocation(190, 0);
+        add(blah);
         width = 1250;
         height = 710;
         this.tick = tick;
@@ -304,6 +307,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         g.setColor(Color.red);
         for (double i = 800; i > 800 - ypoints.size() + 1 ; i -= xvalue) {
             x--;
+            if (ypoints.get(x) > ypoints.get(x + 1))
+                g.setColor(Color.green);
+            else
+                g.setColor(Color.red);
             g.draw(new Line2D.Double(i, ypoints.get(x), i , ypoints.get(x + 1)));
         }
 
@@ -418,7 +425,8 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         inda.repaint();
     }
 
-    public void actionPerformed(ActionEvent e) {;
+    public void actionPerformed(ActionEvent e) {
+
     }
 
 
@@ -445,6 +453,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 inda.update(currentinda, parameters, stuff);
                 icon = init(data);
                 newchart = true;
+                blah.update(name);
                 repaint();
             }
         }

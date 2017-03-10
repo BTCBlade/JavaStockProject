@@ -11,18 +11,20 @@ import java.util.ArrayList;
 /**
  * Created by klongrich on 3/2/17.
  */
-public class watchlist extends JPanel implements MouseWheelListener, MouseMotionListener, MouseListener {
+public class watchlist extends JPanel implements MouseWheelListener, ActionListener {
 
     int offset = 25;
     ArrayList <String> names = new ArrayList<String>();
     ArrayList <Double> change = new ArrayList<Double>();
+    Timer time;
 
     public watchlist()
     {
+        time = new Timer(10000, this);
+        time.start();
         setSize(200, 300);
         addMouseWheelListener(this);
-        addMouseListener(this);
-        addMouseMotionListener(this);
+
     }
 
     public void putborder(int x, int y, Graphics g)
@@ -48,16 +50,30 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
     public void addticker(String tick)
     {
         double move;
+        livetickers currentprice = new livetickers(tick);
+        System.out.println(currentprice.yesterdayclose);
+        System.out.println(currentprice.price());
+        move = ((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100;
+        names.add(tick);
+        change.add(move);
+    }
 
-        ArrayList <Double> data = new ArrayList<Double>();
-        qoutes x = new qoutes(tick, 60, 1);
-        data = x.close();
-        if (data.size() != 0)
+    public void update()
+    {
+        change.clear();
+        for (int i = 0; i < names.size(); i++)
         {
-            move = 0.1841;
-            names.add(tick);
-            change.add(move);
+            livetickers currentprice = new livetickers(names.get(i));
+            change.add(((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100);
         }
+        repaint();
+        System.out.println("Update");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        update();
     }
 
     public void paintComponent(Graphics g2)
@@ -111,24 +127,4 @@ public class watchlist extends JPanel implements MouseWheelListener, MouseMotion
         repaint();
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {}
-
-    @Override
-    public void mousePressed(MouseEvent e) {}
-
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-
-    @Override
-    public void mouseExited(MouseEvent e) {}
-
-    @Override
-    public void mouseDragged(MouseEvent e) {}
-
-    @Override
-    public void mouseMoved(MouseEvent e) {}
 }
