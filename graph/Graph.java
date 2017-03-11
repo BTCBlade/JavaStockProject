@@ -294,11 +294,12 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         BufferedImage image = new BufferedImage(800, 450, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = (Graphics2D)image.getGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        Color c =new Color(0.5803922f, 0.6f, 0.6392157f, 0.2f);
+        g.setColor(c);
         for (int i = 0; i < 450; i += 20)
         {
-            Color c =new Color(0.5803922f, 0.6f, 0.6392157f, 0.2f);
-            g.setColor(c);
             g.drawLine(0, i, 900, i);
         }
 
@@ -332,12 +333,21 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
             }
         }
-        g.setColor(Color.white);
-        for (int i = 0; i < 800; i++)
+        int j = 11;
+        String temp;
+        for (int i = 800; i > 0; i--)
         {
-            if (i % 78 == 0)
+            if (i % 79 == 0)
             {
-                g.fillRect(i, 445, 2, 5);
+                System.out.println(i);
+                g.setColor(Color.white);
+                temp = "03/" + Integer.toString(j);
+                if (i != 790)
+                    g.drawString(temp, i - 5, 440);
+                j--;
+                g.fillRect(i + 10, 445, 2, 5);
+                g.setColor(c);
+                g.drawLine(i + 10, 0, i + 10, 500);
             }
         }
 
