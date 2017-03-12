@@ -51,7 +51,6 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     {
         double move;
         livetickers currentprice = new livetickers(tick);
-        System.out.println(currentprice.yesterdayclose);
         System.out.println(currentprice.price());
         move = ((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100;
         names.add(tick);
@@ -73,7 +72,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        update();
+        //update();
     }
 
     public void paintComponent(Graphics g2)
