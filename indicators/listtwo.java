@@ -94,4 +94,58 @@ public class listtwo {
         }
         return (answer);
     }
+
+    public ArrayList <Double> roc(ArrayList <Double> data, int period)
+    {
+        ArrayList <Double> answer = new ArrayList <Double>();
+        double prev;
+
+        for (int i = period; i < data.size(); i++)
+        {
+            prev = data.get(i - period);
+            answer.add(((data.get(i) - prev ) / prev) * 100);
+        }
+        return (answer);
+    }
+
+    public ArrayList <Double> wma(ArrayList <Double> data, int period) {
+        ArrayList<Double> answer = new ArrayList<Double>();
+        double d;
+        double temp;
+
+        d = 0;
+        for (double x = 0; x <= period; x++)
+        {
+            d += x;
+        }
+        for (int i = period; i < data.size(); i++)
+        {
+            temp = 0;
+            for (int n = 0; n < period; n++)
+            {
+                temp += data.get(i - n) *(n / d);
+            }
+            answer.add(temp);
+        }
+        return (answer);
+    }
+
+    public ArrayList<Double> cc (ArrayList <Double> data, int p1, int p2, int p3)
+    {
+        ArrayList <Double> answer = new ArrayList<Double>();
+        ArrayList <Double> r1 = new ArrayList<Double>();
+        ArrayList <Double> r2 = new ArrayList<Double>();
+        ArrayList <Double> w = new ArrayList<Double>();
+
+        r1 = roc(data, p2);
+        r2 = roc(data, p3);
+        w = wma(r1, p1);
+        for (int i = 0; i < w.size(); i++)
+        {
+            answer.add(w.get(i) + r2.get(i));
+        }
+        return (answer);
+    }
+
+
 }
