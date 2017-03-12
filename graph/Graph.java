@@ -1,12 +1,9 @@
 package graph;
 
-import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.awt.image.*;
 
@@ -98,7 +95,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         int xrow;
 
         ofx = 555;
-        xrow = 855;
+        xrow = 895;
         add(indicat("RSI", "14", xrow, ofx));
         add(indicat("MACD", "12,26,9", xrow,ofx + 30));
         add(indicat("STOCH", "14,3", xrow, ofx + 60));
@@ -108,7 +105,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         xrow += 120;
         add(indicat("AROON", "14",  xrow, ofx));
         add(indicat("DPO", "20", xrow,ofx + 30));
-        add(indicat("COPPOCK", "11,16,13", xrow, ofx + 60));
+        add(indicat("COPPOCK", "10,14,11", xrow, ofx + 60));
         add(indicat("ATR", "14",  xrow, ofx + 90));
         add(indicat("ROC", "14",  xrow, ofx + 120));
 
@@ -333,13 +330,14 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 g.draw(new Line2D.Double(i, convert.get(x), i , convert.get(x + 1)));
             }
         }
+
+        //Drawing x-axis
         int j = 11;
         String temp;
         for (int i = 800; i > 0; i--)
         {
             if (i % 79 == 0)
             {
-                System.out.println(i);
                 g.setColor(Color.white);
                 temp = "03/" + Integer.toString(j);
                 if (i != 790)
@@ -367,7 +365,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         for (int i = 50; i < 500; i += 20) {
             price = max;
             price = Math.round(price * 100.0) / 100.0;
-            g.drawString(Double.toString((price)), 855, i + 8);
+            g.drawString(Double.toString((price)), 845, i + 8);
             g.fillRect(831, i, 5, 3);
             max -= yvalue;
         }
@@ -414,11 +412,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
             //y-axis
             g.fillRect(835, 50, 3, 450);
-            g.fillRect(835, 540, 3, 168);
 
             //x-axis
-            g.fillRect(20, 500, width - 90, 3);
-            g.fillRect(20, 540, width - 90, 3);
+            g.fillRect(20, 500, width , 3);
+            g.fillRect(20, 540, width , 3);
             putprice(g);
         }
 

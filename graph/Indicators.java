@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.IntSummaryStatistics;
 
@@ -33,7 +34,7 @@ public class Indicators extends JPanel{
         width = 836;
         icon = init(x.stoch(data.close(), 20));
 
-        setSize(807, 160);
+        setSize(857, 170);
         setVisible(true);
     }
 
@@ -45,7 +46,7 @@ public class Indicators extends JPanel{
         int p2 = 0;
         int p3 = 0;
 
-        data = info.close();
+        data = info.open();
         if (parameters != null) {
             this.name = name;
             this.parameters = parameters;
@@ -85,6 +86,14 @@ public class Indicators extends JPanel{
             else if (name == "OBV")
             {
                 icon = init(x.obv(data, info.volume()));
+            }
+            else if (name =="ROC")
+            {
+                icon = init(x.wma(data, p1));
+            }
+            else if (name == "COPPOCK")
+            {
+                icon = init(x.cc(data, p1, p2, p3));
             }
 
             repaint();
@@ -135,7 +144,7 @@ public class Indicators extends JPanel{
 
     public ImageIcon init(ArrayList<Double> data)
     {
-        BufferedImage image = new BufferedImage(810, 450, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage image = new BufferedImage(855, 450, BufferedImage.TYPE_3BYTE_BGR);
         ArrayList <Double> ypoints = new ArrayList<Double>();
         double xvalue;
         double yvalue;
@@ -146,25 +155,35 @@ public class Indicators extends JPanel{
         max = maxValue(data);
         ypoints = getconvertedpoints(data);
         xvalue = width / data.size();
-        yvalue = (maxValue(data) - minValue(data)) / 20;
+        yvalue = (maxValue(data) - minValue(data)) / 10;
         x = ypoints.size() - 1;
         Graphics2D g = (Graphics2D)image.getGraphics();
 
         //BackGround Lines
-        for (int i = 0; i < 160; i += 10)
+        for (int i = 0; i < 180; i += 10)
         {
             Color c =new Color(0.5803922f, 0.6f, 0.6392157f, 0.2f);
             g.setColor(c);
-            g.drawLine(0, i, 900, i);
+            g.drawLine(0, i, 800, i);
         }
 
         //Drawing the y-values and dashes
         g.setColor(Color.white);
-        for (int i = 0; i < 160; i += 10) {
-            price = Math.round(max * 100.0) / 100.0;
-            //g.drawString(Double.toString((price)), 823, i + 8);
+        g.fillRect(807, 0, 3, 178);
+        for (int i = 0; i < 180; i += 10) {
             g.fillRect(802, i, 5, 2);
             max -= yvalue;
+        }
+
+        max = maxValue(data);
+        for (int i = 0; i < 160; i += 10) {
+            if (i >= 35) {
+                price = Math.round(max * 100.0) / 100.0;
+                max -= yvalue;
+                if (i % 20 == 0) {
+                    g.drawString(Double.toString((price)), 818, i + 7);
+                }
+            }
         }
 
         //Drawing the acutal Chart
@@ -191,11 +210,13 @@ public class Indicators extends JPanel{
         }
 
         //Drawing paramter values
+        DecimalFormat form = new DecimalFormat("#.##");
+
         System.out.println(parameters);
         if (parameters == "0")
             g.drawString(name, 10, 20);
         else
-            g.drawString(name + "(" + parameters + ")" , 10, 20);
+            g.drawString(name + "(" + parameters + ")" + "  " + form.format(data.get(data.size() - 1)) , 10, 20);
 
         ImageIcon icon = new ImageIcon(image);
         return (icon);
