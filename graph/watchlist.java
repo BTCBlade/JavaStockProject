@@ -23,6 +23,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         time = new Timer(10000, this);
         time.start();
         setSize(200, 300);
+        setVisible(true);
         addMouseWheelListener(this);
 
     }
@@ -66,7 +67,6 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
             change.add(((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100);
         }
         repaint();
-        System.out.println("Update");
     }
 
     @Override

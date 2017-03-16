@@ -95,6 +95,10 @@ public class Indicators extends JPanel{
             {
                 icon = init(x.cc(data, p1, p2, p3));
             }
+            else if (name == "%R")
+            {
+                icon = init(x.w(data, p1));
+            }
 
             repaint();
         }
@@ -216,7 +220,7 @@ public class Indicators extends JPanel{
         if (parameters == "0")
             g.drawString(name, 10, 20);
         else
-            g.drawString(name + "(" + parameters + ")" + "  " + form.format(data.get(data.size() - 1)) , 10, 20);
+            g.drawString(name + " (" + parameters + ")" + "  " + form.format(data.get(data.size() - 1)) , 10, 20);
 
         ImageIcon icon = new ImageIcon(image);
         return (icon);
