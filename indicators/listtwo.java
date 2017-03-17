@@ -147,5 +147,30 @@ public class listtwo {
         return (answer);
     }
 
+    public ArrayList<Double> w(ArrayList <Double> data, int period)
+    {
+        ArrayList <Double> answer = new ArrayList<Double>();
+        double temp;
+        double hh;
+        double ll;
 
+        hh = data.get(0);
+        ll = data.get(0);
+        for (int i = period; i < data.size(); i++)
+        {
+            for (int j = 0; j < period; j++)
+            {
+                temp = data.get(i - j);
+                if (temp > hh) {
+                    hh = temp;
+                }
+                else if(temp < ll)
+                {
+                    ll = temp;
+                }
+            }
+            answer.add(((hh - data.get(i)) / (hh - ll)) * -100);
+        }
+        return (answer);
+    }
 }
