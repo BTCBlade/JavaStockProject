@@ -215,8 +215,6 @@ public class Indicators extends JPanel{
 
         //Drawing paramter values
         DecimalFormat form = new DecimalFormat("#.##");
-
-        System.out.println(parameters);
         if (parameters == "0")
             g.drawString(name, 10, 20);
         else

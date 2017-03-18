@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class livetickers {
 
-    double yesterdayclose;
+    public double yesterdayclose;
     double cp;
 
     String tick;
