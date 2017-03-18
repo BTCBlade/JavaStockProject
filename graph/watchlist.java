@@ -37,7 +37,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         addMouseWheelListener(this);
 
         try {
-            FileReader fr = new FileReader("./src/graph/lists/" + name + ".txt");
+            FileReader fr = new FileReader("/.//lists/" + name + ".txt");
             BufferedReader buff = new BufferedReader(fr);
 
             String line = buff.readLine();

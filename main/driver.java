@@ -16,8 +16,8 @@ public class driver {
 
     public static void main (String [] args)
     {
-        listone inda = new listone();
-        qoutes data = new qoutes("SPY", 300, 10);
+        //listone inda = new listone();
+        //qoutes data = new qoutes("SPY", 300, 10);
 
         Graph chart = new Graph("SPY");
 
@@ -28,10 +28,10 @@ public class driver {
 
         //BBlower test
         //chart.addIndicator(inda.bsma(data.open(), 60));
-        chart.addIndicator(inda.bblower(data.open(), 60, 2));
+        //chart.addIndicator(inda.bblower(data.open(), 60, 2));
 
         //BBupper test
-        chart.addIndicator(inda.bbupper(data.open(), 60, 2));
+        //chart.addIndicator(inda.bbupper(data.open(), 60, 2));
 
         //chart.addIndicator(inda.bsma(data.open(), 60));
 
@@ -42,11 +42,11 @@ public class driver {
 
         //EMA test
 
-        chart.addIndicator(inda.ema(data.smoothed(), 4));
-        chart.addIndicator(inda.ema(data.smoothed(), 6));
-        chart.addIndicator(inda.ema(data.smoothed(), 12));
-        chart.addIndicator(inda.ema(data.smoothed(), 16));
-        chart.addIndicator(inda.ema(data.smoothed(), 20));
+        //chart.addIndicator(inda.ema(data.smoothed(), 4));
+        //chart.addIndicator(inda.ema(data.smoothed(), 6));
+        //chart.addIndicator(inda.ema(data.smoothed(), 12));
+        //chart.addIndicator(inda.ema(data.smoothed(), 16));
+        //chart.addIndicator(inda.ema(data.smoothed(), 20));
 
 
 

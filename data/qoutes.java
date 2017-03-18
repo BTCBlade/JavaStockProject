@@ -4,12 +4,12 @@ package data;
   Created by klongrich on 2/23/17.
  **/
 
-import static org.jsoup.Jsoup.connect;
+//import static org.jsoup.Jsoup.connect;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+//import com.sun.org.apache.xpath.internal.SourceTree;
+//import org.jsoup.nodes.Document;
+//import org.jsoup.nodes.Element;
+//import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.URL;
@@ -142,6 +142,7 @@ public class qoutes {
     }
 
 
+	/*
     public void googleSearch(String searchTerm, int numberofResults)
     {
         String URL = "https://www.google.com/search";
@@ -160,6 +161,7 @@ public class qoutes {
             e.printStackTrace();
         }
     }
+	*/
 
     public ArrayList<Double> open()
     {

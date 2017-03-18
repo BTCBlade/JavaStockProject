@@ -40,7 +40,7 @@ public class Indicators extends JPanel{
 
     public void update(String name, String parameters, qoutes info)
     {
-        ArrayList <Double> data = new ArrayList();
+        ArrayList <Double> data = new ArrayList <Double>();
         String temp[];
         int p1 = 0;
         int p2 = 0;
