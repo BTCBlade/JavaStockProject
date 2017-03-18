@@ -4,14 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.awt.image.*;
+import java.util.Date;
 
 /**
  * Created by klongrich on 2/23/17.
  */
 
+import data.indaymovers;
 import data.qoutes;
+import graph.Scanner.scannerbox;
 
 public class Graph extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
@@ -29,50 +37,64 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private int intervals = 60;
     static String parameters = "14,3";
     String currentinda = "STOCH";
-    String tick;
+    public String tick;
     private ArrayList<Double> ypoints = new ArrayList <Double>();
     static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
     Timer time;
 
     ImageIcon icon;
     watchlistbox list;
+    scannerbox scanner;
     Overlays OverlayPanel;
     Indicators inda;
     qoutes data;
+    Header header;
 
-    LivePricepanel blah = new LivePricepanel("spy");
     public Graph(String tick)
     {
-        blah.setLocation(190, 0);
-        add(blah);
-        width = 1250;
+        width = 1300;
         height = 710;
+
         this.tick = tick;
         time = new Timer(100, this);
         time.start();
 
+        //Adding Watchlist
         list = new watchlistbox();
-        list.addticker("SPY");
-        list.setLocation(960, 50);
+        list.setLocation(910, 40);
         add(list);
 
+        //Adding Scanner
+        scanner = new scannerbox();
+        scanner.setLocation(1110, 40);
+        add(scanner);
+
+        //Adding Overlay Panel
         ArrayList <Double> x = new ArrayList <Double>();
         data = new qoutes(tick,300,10);
         x = data.smoothed();
         OverlayPanel = new Overlays(data.smoothed());
         init(x);
 
+        //Adding Indicator chart panel
         inda = new Indicators("SPY");
+        add(inda);
+        inda.setVisible(true);
+        inda.setLocation(28, 544);
 
+        //Adding Header
+        header = new Header();
+       // add(header);
+        header.setLocation(0, 0);
+
+        //Init the frame
         getContentPane().setBackground(Color.black);
         setLayout(null);
         setSize(width, height);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        add(inda);
-        inda.setVisible(true);
-        inda.setLocation(28, 544);
 
+        //Adding buttons
         int offset = 25;
         int space = 170;
 
@@ -88,12 +110,16 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         add(Overlays());
         add(modifyInda());
+        add(LeftButton());
+        add(RightButton());
+       // add(candlechart());
+        //add(linechart());
 
         int ofx;
         int xrow;
 
         ofx = 555;
-        xrow = 895;
+        xrow = 910;
         add(indicat("RSI", "14", xrow, ofx));
         add(indicat("MACD", "12,26,9", xrow,ofx + 30));
         add(indicat("STOCH", "14,3", xrow, ofx + 60));
@@ -158,13 +184,88 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setLocation(1130, 510);
+        button.setLocation(1150, 510);
         button.setSize(25, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
     }
 
+    public JButton LeftButton()
+    {
+        JButton button = new JButton("<--");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scanner.updateLeft();
+                movechart(scanner.selected());
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1112, 445);
+        button.setSize(80, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+    }
+
+    public JButton RightButton()
+    {
+        JButton button = new JButton("-->");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scanner.updateRight();
+                movechart(scanner.selected());
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1204, 445);
+        button.setSize(80, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+    }
+
+    public JButton linechart()
+    {
+        JButton button = new JButton("Line");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(950, 2);
+        button.setSize(100, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+
+    }
+
+    public JButton candlechart()
+    {
+        JButton button = new JButton("Candle Stick");
+        button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setLocation(1100, 2);
+        button.setSize(100, 25);
+        button.setBackground(Color.gray);
+        button.setForeground(Color.white);
+        return (button);
+
+    }
 
     public JButton Overlays()
     {
@@ -177,7 +278,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setLocation(360, 10);
+        button.setLocation(720, 2);
         button.setSize(180, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
@@ -293,21 +394,54 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         }
 
         //Drawing x-axis
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
-        int j = 11;
-        String temp;
-        for (int i = 800; i > 0; i--)
-        {
-            if (i % 79 == 0)
-            {
-                g.setColor(Color.white);
-                temp = "03/" + Integer.toString(j);
-                if (i != 790)
-                    //g.drawString(temp, i - 5, 440);
-                j--;
-                g.fillRect(i + 10, 445, 2, 5);
-                g.setColor(c);
-                g.drawLine(i + 10, 0, i + 10, 500);
+        if (numberofdays == 10) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
+            int j = 11;
+            String temp;
+            for (int i = 800; i > 0; i--) {
+                if (i % 79 == 0) {
+                    g.setColor(Color.white);
+                    temp = "03/" + Integer.toString(j);
+                    if (i != 790)
+                        g.drawString(temp, i - 5, 440);
+                    j--;
+                    g.fillRect(i + 10, 445, 2, 5);
+                    g.setColor(c);
+                    g.drawLine(i + 10, 0, i + 10, 500);
+                }
+            }
+        }
+
+        if (numberofdays == 2) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
+            int time = 13;
+            int date = 16;
+            String ampm = "pm";
+            String temp;
+            for (int i = 800; i > 0; i--) {
+                if (i % 60 == 0) {
+                    g.setColor(Color.white);
+
+                    if (time == 13) {
+                        time = 1;
+                        ampm = "pm";
+                    }
+                    temp = Integer.toString(time);
+                    g.drawString(temp + ampm, i - 10, 440);
+                    if (time == 7) {
+                        g.drawString("03/" + Integer.toString(date), i - 15, 420);
+                        time = 14;
+                        date--;
+                    }
+                    if (time == 1) {
+                        time = 13;
+                        ampm = "am";
+                    }
+                    time--;
+                    g.fillRect(i, 445, 2, 5);
+                    g.setColor(c);
+                    g.drawLine(i, 0, i, 500);
+                }
             }
         }
 
@@ -357,19 +491,48 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
         if (newchart == true)
         {
+            livetickers currentprice = new livetickers(tick);
+            int y = 20;
+            int h = 30;
+
+            g.setColor(Color.black);
+            g.fillRect(0, 0, width, h);
+
+            Color c =new Color(0.5803922f, 0.6f, 0.6392157f, 0.1f);
+            g.setColor(c);
+            g.fillRect(0, 0, width, h);
+
+            g.setColor(Color.lightGray);
+            g.fillRect(0, 0, width, 1);
+            g.fillRect(0, h - 1, width, 1);
+            g.fillRect(150, 0, 1, h );
+            g.fillRect(350, 0, 1, h);
+            g.fillRect(460, 0, 1, h);
+            g.fillRect(560, 0, 1, h);
+            g.fillRect(740, 0, 1, h);
+            g.fillRect(918, 0, 1, h);
+
+            g.setColor(Color.white);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 13));
+            g.drawString("Ticker: " + tick, 40, y);
+            g.drawString("Current Price: " + currentprice.price() , 180, y);
+            g.drawString("Bid: x18" , 375, y);
+            g.drawString("Ask: x7" , 490, y);
+            g.drawString("Volume: 78,343,951", 585, y);
+
             g.setColor(Color.black);
             g.fillRect(840, 48, 70, 450);
-            g.fillRect(50, 10, 110, 30);
-            g.fillRect(730,10,110, 30);
+           //g.fillRect(50, 10, 110, 30);
+            //g.fillRect(730,10,110, 30);
 
             //Putting the ticker name and period
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
             //g.drawString("Watchlist", 960, 80);
-            g.drawString("Indicators", 960, 530);
+            g.drawString("Indicators", 980, 530);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-            g.drawString("Ticker: " + tick, 50, 25);
-            g.drawString("Days : " + numberofdays, 730, 25);
+           // g.drawString("Ticker: " + tick, 50, 25);
+            //g.drawString("Days : " + numberofdays, 730, 25);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
 
             //y-axis
@@ -399,6 +562,25 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     }
 
 
+    public void movechart(String tick)
+    {
+        ArrayList <Double> data = new ArrayList<Double>();
+        qoutes stuff = new qoutes(tick, intervals, numberofdays);
+        data = stuff.smoothed();
+        if (!data.isEmpty())
+        {
+            ypoints.clear();
+            this.tick = tick;
+            OverlayPanel.upadate(data);
+            indactors = OverlayPanel.getinda();
+            inda.update(currentinda, parameters, stuff);
+            icon = init(data);
+            newchart = true;
+            repaint();
+        }
+    }
+
+
     @Override
     public void mouseClicked(MouseEvent e) {
         ArrayList <Double> data = new ArrayList <Double>();
@@ -422,7 +604,6 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
                 inda.update(currentinda, parameters, stuff);
                 icon = init(data);
                 newchart = true;
-                blah.update(name);
                 repaint();
             }
         }

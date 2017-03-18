@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileReader;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -13,13 +16,13 @@ public class watchlistbox extends JPanel {
 
     watchlist list;
     int width = 200;
-    int height = 400;
+    int height = 430;
     String title = "Watchlist";
 
     watchlistbox()
     {
         setLayout(null);
-        list = new watchlist();
+        list = new watchlist("Watchlist-03-17-17");
         add(list);
         list.setLocation(0, 50);
         setSize(width, height);
@@ -27,6 +30,8 @@ public class watchlistbox extends JPanel {
         add(AddButton(init(), "Add"));
         add(watchlistButton(init(), "+"));
         add(EditButton(init(), "Edit"));
+        add(ClearButton(init(), "Clear"));
+        add(SelectButton(init(), "Select"));
     }
 
     public JButton init()
@@ -53,7 +58,6 @@ public class watchlistbox extends JPanel {
         init.setLocation(2, 365);
         init.setSize(80, 25);
         return (init);
-
     }
 
     public JButton EditButton(JButton init, String name)
@@ -66,13 +70,11 @@ public class watchlistbox extends JPanel {
                 frame.setSize(250, 500);
                 frame.setVisible(true);
 
-
             }
         });
-        init.setLocation(115, 365);
+        init.setLocation(95, 365);
         init.setSize(80, 25);
         return (init);
-
     }
 
     public JButton watchlistButton(JButton init, String name)
@@ -82,12 +84,38 @@ public class watchlistbox extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String name = JOptionPane.showInputDialog("Enter Name", "");
                 title = name;
+                list.updatelist(name);
                 repaint();
+            }
+        });
+        init.setLocation(155, 8);
+        init.setSize(25, 25);
+        return (init);
+    }
+
+    public JButton ClearButton(JButton init, String name)
+    {
+        init.setText(name);
+        init.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                    list.clear();
+            }
+        });
+        init.setLocation(2, 405);
+        init.setSize(80, 25);
+        return (init);
+    }
+
+    public JButton SelectButton(JButton init, String name)
+    {
+        init.setText(name);
+        init.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
             }
         });
-        init.setLocation(170, 8);
-        init.setSize(25, 25);
+        init.setLocation(95, 405);
+        init.setSize(80, 25);
         return (init);
     }
 
@@ -101,7 +129,6 @@ public class watchlistbox extends JPanel {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.setColor(Color.white);
         g.drawString(title, 0, 30);
-        System.out.println("Working");
     }
 
     public void addticker(String name)

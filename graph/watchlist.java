@@ -1,31 +1,79 @@
 package graph;
 
+import data.UpDateDatabase;
 import data.qoutes;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by klongrich on 3/2/17.
  */
 public class watchlist extends JPanel implements MouseWheelListener, ActionListener {
 
-    int offset = 25;
-    ArrayList <String> names = new ArrayList<String>();
-    ArrayList <Double> change = new ArrayList<Double>();
-    Timer time;
+    private int offset = 25;
+    private ArrayList <String> names = new ArrayList<String>();
+    private ArrayList <Double> change = new ArrayList<Double>();
+    private Timer time;
+    public String filename;
 
-    public watchlist()
+    public watchlist(String name)
     {
         time = new Timer(10000, this);
         time.start();
-        setSize(200, 300);
+        filename = name;
+        setSize(180, 300);
         setVisible(true);
         addMouseWheelListener(this);
 
+        try {
+            FileReader fr = new FileReader("./src/graph/lists/" + name + ".txt");
+            BufferedReader buff = new BufferedReader(fr);
+
+            String line = buff.readLine();
+            while (line != null)
+            {
+                names.add(line);
+                livetickers currentprice = new livetickers(line);
+                change.add(((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100);
+                line = buff.readLine();
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatelist(String name)
+    {
+        filename = name;
+        try {
+            FileReader fr = new FileReader("./src/graph/lists/" + name + ".txt");
+            BufferedReader buff = new BufferedReader(fr);
+
+            String line = buff.readLine();
+            while (line != null)
+            {
+                names.add(line);
+                livetickers currentprice = new livetickers(line);
+                change.add(((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100);
+                line = buff.readLine();
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        clear();
     }
 
     public void putborder(int x, int y, Graphics g)
@@ -50,9 +98,22 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
 
     public void addticker(String tick)
     {
+        DateFormat df = new SimpleDateFormat("MM-dd-yy");
+        Date dateobj = new Date();
+
+        try {
+            FileWriter fw = new FileWriter("./src/graph/lists/" + df.format(dateobj) + ".txt", true);
+            fw.write(tick + "\n");
+            System.out.println("Writing " + tick);
+            fw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         double move;
         livetickers currentprice = new livetickers(tick);
-        System.out.println(currentprice.price());
         move = ((currentprice.price()/ currentprice.yesterdayclose) - 1) * 100;
         names.add(tick);
         change.add(move);
@@ -84,7 +145,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         g.setColor(c);
         g.fillRect(0,0,200,300);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        NumberFormat formatter = new DecimalFormat("#0.0000");
+        NumberFormat formatter = new DecimalFormat("#0.00");
 
         for (int i = 0; i < names.size(); i++) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
@@ -97,7 +158,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
             pchange = formatter.format(change.get(i));
             g.drawString(pchange, 115, offset + i * 50);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
-            g.drawString(" %", 170, offset + i * 50);
+            g.drawString(" %", 155, offset + i * 50);
             g.fillRect(0, offset + 20 + (i * 50), 200, 3);
         }
         putborder(200, 300, g);
@@ -125,5 +186,4 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         }
         repaint();
     }
-
 }
