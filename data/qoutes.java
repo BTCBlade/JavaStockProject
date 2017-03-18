@@ -4,7 +4,6 @@ package data;
   Created by klongrich on 2/23/17.
  **/
 
-/*
 import static org.jsoup.Jsoup.connect;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
@@ -12,7 +11,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-*/
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -33,6 +31,7 @@ public class qoutes {
     ArrayList <Double> Volume = new ArrayList <Double>();
     String tick;
 
+
     public qoutes(String tick, int intervals, int days)
     {
         this.tick = tick;
@@ -50,7 +49,7 @@ public class qoutes {
             for (int i = 0; i < 7; i++)
                 line = buff.readLine();
 
-            while (line != null)
+            while (line != null && !line.contains("TIMEZONE_OFFSET=-240"))
             {
                 temp = line.split(",");
                 Open.add(Double.parseDouble(temp[0]));
@@ -105,6 +104,7 @@ public class qoutes {
         }
     }
 
+
     public double getCurrentprice()
     {
         try
@@ -141,7 +141,7 @@ public class qoutes {
         return (0);
     }
 
-/*
+
     public void googleSearch(String searchTerm, int numberofResults)
     {
         String URL = "https://www.google.com/search";
@@ -160,7 +160,6 @@ public class qoutes {
             e.printStackTrace();
         }
     }
-*/
 
     public ArrayList<Double> open()
     {
@@ -181,4 +180,6 @@ public class qoutes {
     {
         return (Close);
     }
+
+    public ArrayList<Double> volume() { return (Volume);}
 }

@@ -45,7 +45,6 @@ public class UpDateDatabase {
                  qoutes nasdaqdata = new qoutes(buff3.readLine(), 60, 1);
                  nasdaqdata.save();
              }
-
          }
          catch (IOException e)
          {
