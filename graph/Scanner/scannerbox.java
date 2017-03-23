@@ -1,13 +1,9 @@
 package graph.Scanner;
 
-import graph.Graph;
-import graph.watchlist;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * Created by klongrich on 3/16/17.
@@ -16,7 +12,7 @@ public class scannerbox extends JPanel {
 
     scanner list;
     int width = 200;
-    int height = 450;
+    int height = 400;
     String title = "Scanner";
 
     public scannerbox()
@@ -47,7 +43,7 @@ public class scannerbox extends JPanel {
         init.setText(name);
         init.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               list.scan();
+                list.scan();
             }
         });
         init.setLocation(2, 365);
@@ -78,7 +74,7 @@ public class scannerbox extends JPanel {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setColor(Color.black);
-        g.fillRect(0,0,width, 50);
+        g.fillRect(0,0,width, height);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.setColor(Color.white);
         g.drawString(title, 25, 30);
