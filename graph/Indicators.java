@@ -3,7 +3,6 @@ package graph;
 import data.qoutes;
 import indicators.listone;
 import indicators.listtwo;
-import javafx.beans.property.IntegerProperty;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,6 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
 
 /**
  * Created by klongrich on 3/7/17.
@@ -30,8 +28,8 @@ public class Indicators extends JPanel{
     {
         x = new listtwo();
         y = new listone();
-        qoutes data = new qoutes(name, 300, 10);
-        width = 836;
+        qoutes data = new qoutes(name, 60, 2);
+        width = 857;
         icon = init(x.stoch(data.close(), 20));
 
         setSize(857, 170);
@@ -148,7 +146,7 @@ public class Indicators extends JPanel{
 
     public ImageIcon init(ArrayList<Double> data)
     {
-        BufferedImage image = new BufferedImage(855, 450, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage image = new BufferedImage(865, 450, BufferedImage.TYPE_3BYTE_BGR);
         ArrayList <Double> ypoints = new ArrayList<Double>();
         double xvalue;
         double yvalue;
@@ -194,9 +192,9 @@ public class Indicators extends JPanel{
         if (xvalue > 1)
             xvalue = 1;
         g.setColor(Color.BLUE);
-        for (double i = 800; i > 800 - ypoints.size() + 1 ; i -= xvalue) {
+        for (double i = 800; i > 800 - ypoints.size() + 1; i -= xvalue) {
             x--;
-            g.draw(new Line2D.Double(i, ypoints.get(x) + 35, i , ypoints.get(x + 1) + 35));
+            g.draw(new Line2D.Double(i, ypoints.get(x) + 35, i, ypoints.get(x + 1) + 35));
         }
 
         //Drawing extras, signal lines, extc....
@@ -229,3 +227,4 @@ public class Indicators extends JPanel{
         icon.paintIcon(this, g, 0, 0);
     }
 }
+

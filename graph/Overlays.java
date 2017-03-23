@@ -1,7 +1,6 @@
 package graph;
 
 import indicators.listone;
-import main.driver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class Overlays extends JFrame {
+public class Overlays extends JDialog {
 
     listone x;
     ArrayList <Double> data = new ArrayList <Double> ();
@@ -20,12 +19,13 @@ public class Overlays extends JFrame {
     boolean ema = false;
     boolean bb = false;
 
-    Overlays(ArrayList<Double> data)
+    public Overlays(ArrayList<Double> data)
     {
         this.data = data;
         setSize(200, 200);
         //setResizable(false);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(getParent());
         setBackground(Color.black);
         setLayout(new GridLayout(2, 2));
         x = new listone();
@@ -60,6 +60,7 @@ public class Overlays extends JFrame {
         button.setSize(100, 25);
         button.setBackground(Color.gray);
         button.setForeground(Color.white);
+        button.setOpaque(true);
         return (button);
     }
 

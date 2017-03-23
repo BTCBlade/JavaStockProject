@@ -26,7 +26,7 @@ public class LivePricepanel extends JPanel implements ActionListener {
 
     public void update(String tick)
     {
-       ticker = tick;
+        ticker = tick;
         x = new livetickers(ticker);
         data = Double.toString(x.price());
         repaint();
@@ -53,3 +53,4 @@ public class LivePricepanel extends JPanel implements ActionListener {
         //repaint();
     }
 }
+

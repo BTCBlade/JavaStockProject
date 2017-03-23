@@ -14,7 +14,7 @@ public class Header extends JPanel {
 
     LivePricepanel liveprice;
 
-    Header()
+    public Header()
     {
         liveprice = new LivePricepanel(ticker);
         liveprice.setLocation(190, 0);
@@ -64,3 +64,4 @@ public class Header extends JPanel {
     }
 
 }
+
