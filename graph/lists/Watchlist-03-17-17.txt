@@ -1,4 +1,0 @@
-SINO
-GLBS
-THLD
-TOPS
