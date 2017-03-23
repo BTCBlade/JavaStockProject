@@ -39,7 +39,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         addMouseWheelListener(this);
 
         try {
-            FileReader fr = new FileReader("./src/graph/watchlist/lists/" + name + ".txt");
+            FileReader fr = new FileReader("./lists/" + name + ".txt");
             BufferedReader buff = new BufferedReader(fr);
 
             String line = buff.readLine();
@@ -60,7 +60,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     {
         filename = name;
         try {
-            FileReader fr = new FileReader("./src/graph/watchlist/lists/" + name + ".txt");
+            FileReader fr = new FileReader("./lists/" + name + ".txt");
             BufferedReader buff = new BufferedReader(fr);
 
             String line = buff.readLine();
@@ -104,7 +104,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         Date dateobj = new Date();
 
         try {
-            FileWriter fw = new FileWriter("./src/graph/watchlist/lists/" + df.format(dateobj) + ".txt", true);
+            FileWriter fw = new FileWriter("./lists/" + df.format(dateobj) + ".txt", true);
             fw.write(tick + "\n");
             System.out.println("Writing " + tick);
             fw.close();
