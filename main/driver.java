@@ -3,14 +3,7 @@ package main;
 /**
  * Created by klongrich on 2/27/17.
  */
-import data.qoutes;
-import data.UpDateDatabase;
-import graph.livetickers;
-import indicators.listone;
 import graph.Graph;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class driver {
 
@@ -18,6 +11,12 @@ public class driver {
     {
         //listone inda = new listone();
         //qoutes data = new qoutes("SPY", 300, 10);
+        //yahoodata data = new yahoodata("SPY");
+
+
+
+        //UpDateDatabase x = new UpDateDatabase();
+       // x.update();
 
         Graph chart = new Graph("SPY");
 
