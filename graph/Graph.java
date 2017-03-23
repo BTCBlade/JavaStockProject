@@ -39,7 +39,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
     private ArrayList<Double> ypoints = new ArrayList <Double>();
     static ArrayList<ArrayList<Double>> indactors = new ArrayList <ArrayList<Double>>();
     Timer time;
-    boolean macoffset = true;
+    boolean macoffset = false;
 
     ImageIcon icon;
     watchlistbox list;
@@ -177,14 +177,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setBackground(Color.black);
         if (macoffset == true) {
             button.setLocation(x, 509 - 20);
-            button.setBackground(Color.black);
             button.setOpaque(true);
         }
         else {
             button.setLocation(x, 509);
-            button.setBackground(Color.lightGray);
         }
         button.setSize(110, 25);
         button.setForeground(Color.white);
@@ -203,14 +202,13 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         });
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
+        button.setBackground(Color.black);
         if (macoffset == true) {
             button.setLocation(1150, 490);
-            button.setBackground(Color.black);
             button.setOpaque(true);
         }
         else {
             button.setLocation(1150, 510);
-            button.setBackground(Color.lightGray);
         }
         button.setSize(25, 25);
         button.setForeground(Color.white);
@@ -231,16 +229,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
         button.setLocation(1112, 445);
         button.setSize(80, 25);
-        if (macoffset == true) {
-            button.setLocation(1112, 445);
-            button.setBackground(Color.black);
-            button.setOpaque(true);
-        }
-        else {
-            button.setLocation(1112, 465);
-            button.setBackground(Color.lightGray);
-        }
-
+        button.setBackground(Color.black);
+        button.setLocation(1112, 445);
+        button.setOpaque(true);
         button.setForeground(Color.white);
         button.setOpaque(true);
         return (button);
@@ -259,15 +250,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
         button.setSize(80, 25);
-        if (macoffset == true) {
-            button.setLocation(1204, 445);
-            button.setBackground(Color.black);
-            button.setOpaque(true);
-        }
-        else {
-            button.setLocation(1204, 465);
-            button.setBackground(Color.lightGray);
-        }
+        button.setLocation(1204, 445);
+        button.setBackground(Color.black);
+        button.setOpaque(true);
         button.setForeground(Color.white);
         return (button);
     }
@@ -636,9 +621,10 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.drawString("Volume: 71,417,714" , 585, y);
 
             g.setColor(Color.black);
-            g.fillRect(840, 50, 70, 450);
-            //g.fillRect(50, 10, 110, 30);
-            //g.fillRect(730,10,110, 30);
+            if (macoffset == true)
+                g.fillRect(840, 50, 70, 450);
+            else
+                g.fillRect(840, 45, 70, 455);
 
             //Putting the ticker name and period
             g.setColor(Color.WHITE);

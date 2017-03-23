@@ -175,14 +175,14 @@ public class scanner extends JPanel implements MouseWheelListener, ActionListene
                 {
                     if (offset > morespace)
                     {
-                        offset -= 20;
+                        offset -= 10;
                     }
             }
         }
         else if(e.getWheelRotation() == -1)
         {
             if (offset <= 20) {
-                offset += 20;
+                offset += 10;
             }
         }
         repaint();
