@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class watchlistbox extends JPanel {
 
-    watchlist list;
+    static watchlist list;
     int width = 200;
     int height = 430;
     String title = "Watchlist";
@@ -41,7 +41,7 @@ public class watchlistbox extends JPanel {
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setBackground(Color.black);
+        button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
     }
@@ -67,14 +67,7 @@ public class watchlistbox extends JPanel {
         init.setText(name);
         init.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-                editmenu x = new editmenu(list.getNames());
-                JDialog frame = new JDialog();
-                frame.setLocationRelativeTo(getParent());
-                frame.add(x);
-                frame.setSize(250, 500);
-                frame.setVisible(true);
-
+                editmenubox x = new editmenubox(list.getNames());
             }
         });
         init.setLocation(95, 365);
@@ -90,7 +83,8 @@ public class watchlistbox extends JPanel {
                 String name = JOptionPane.showInputDialog("Enter Name", "");
                 if (name != null) {
                     title = name;
-                    list.updatelist(name);
+                    list.newlist(name);
+                    System.out.println("Update");
                     repaint();
                 }
             }
