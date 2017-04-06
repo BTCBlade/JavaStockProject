@@ -27,10 +27,10 @@ public class scanner extends JPanel implements MouseWheelListener, ActionListene
 
     public scanner()
     {
-        x = new indaymovers();
+        //x = new indaymovers();
         time = new Timer(10000, this);
         time.start();
-        intinames = x.geticks();
+        //intinames = x.geticks();
         inti();
 
         setSize(180, 300);
@@ -175,14 +175,14 @@ public class scanner extends JPanel implements MouseWheelListener, ActionListene
                 {
                     if (offset > morespace)
                     {
-                        offset -= 10;
+                        offset -= 20;
                     }
             }
         }
         else if(e.getWheelRotation() == -1)
         {
             if (offset <= 20) {
-                offset += 10;
+                offset += 20;
             }
         }
         repaint();

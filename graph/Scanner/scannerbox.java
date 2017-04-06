@@ -33,7 +33,7 @@ public class scannerbox extends JPanel {
         button.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.darkGray, 2));
-        button.setBackground(Color.black);
+        button.setBackground(Color.gray);
         button.setForeground(Color.white);
         return (button);
     }

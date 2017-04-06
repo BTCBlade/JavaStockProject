@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by klongrich on 3/7/17.
  */
+
 public class Indicators extends JPanel{
 
     String name = "STOCH";
