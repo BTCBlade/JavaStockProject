@@ -30,7 +30,6 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     private Timer time;
     public String filename;
 
-
     //Watchlist must be init with a text file that has a list of tickers seprated by newlines.
     public watchlist(String name) {
         time = new Timer(10000, this);
@@ -41,7 +40,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         addMouseWheelListener(this);
 
         try {
-            FileReader fr = new FileReader("./src/graph/watchlist/lists/" + name + ".txt");
+            FileReader fr = new FileReader("./graph/watchlist/lists/" + name + ".txt");
             BufferedReader buff = new BufferedReader(fr);
 
             String line = buff.readLine();
@@ -72,7 +71,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         names.remove(index);
         update();
         try {
-            x = new Formatter("./src/graph/watchlist/lists/" + filename + ".txt");
+            x = new Formatter("./graph/watchlist/lists/" + filename + ".txt");
             for (int i = 0; i < names.size(); i++)
             {
                 System.out.println(names.get(i));
@@ -104,7 +103,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
         names.clear();
         change.clear();
         try {
-            Formatter x  = new Formatter("./src/graph/watchlist/lists/" + filename + ".txt");
+            Formatter x  = new Formatter("./graph/watchlist/lists/" + filename + ".txt");
             x.close();
         }
         catch (IOException e)
@@ -119,7 +118,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     public void addticker(String tick)
     {
         try {
-            FileWriter fw = new FileWriter("./src/graph/watchlist/lists/" + filename + ".txt", true);
+            FileWriter fw = new FileWriter("./graph/watchlist/lists/" + filename + ".txt", true);
             fw.write(tick + "\n");
             System.out.println("Writing " + tick);
             fw.close();

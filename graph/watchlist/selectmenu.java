@@ -15,7 +15,7 @@ public class selectmenu extends JPanel {
     selectmenu()
     {
         setSize(250, 500);
-        File folder = new File("./src/graph/watchlist/lists");
+        File folder = new File("./graph/watchlist/lists");
         File[] files = folder.listFiles();
         this.files = files;
     }
