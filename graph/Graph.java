@@ -19,10 +19,10 @@ import java.util.Locale;
  */
 
 import data.qoutes;
-        import graph.Scanner.scannerbox;
+import graph.Scanner.scannerbox;
 import graph.watchlist.watchlistbox;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
+//import yahoofinance.Stock;
+//import yahoofinance.YahooFinance;
 
 public class Graph extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
@@ -635,6 +635,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
 
 
             g.setColor(Color.white);
+			/*
             try {
                 Stock stocks = YahooFinance.get(tick);
                 g.drawString("Ticker: " + tick, 40, y);
@@ -646,8 +647,9 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             {
                 e.printStackTrace();
             }
+			*/
 
-            /*
+            
             g.setColor(Color.white);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 13));
             g.drawString("Ticker: " + tick, 40, y);
@@ -655,7 +657,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.drawString("Bid: x18" , 375, y);
             g.drawString("Ask: x7" , 490, y);
             g.drawString("Volume: 71,417,714" , 585, y);
-            */
+            
 
             g.setColor(Color.black);
             g.fillRect(840, 50, 70, 450);
