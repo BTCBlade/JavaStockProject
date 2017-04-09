@@ -1,2 +1,2 @@
-javac graph/Graph.java data/qoutes.java indicators/listone.java main/driver.java
+javac graph/*.java graph/watchlist/*.java graph/Scanner/*.java  data/*.java indicators/*.java main/driver.java
 java main.driver &
