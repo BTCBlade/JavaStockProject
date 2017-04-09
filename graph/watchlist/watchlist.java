@@ -29,7 +29,7 @@ public class watchlist extends JPanel implements MouseWheelListener, ActionListe
     private ArrayList<Double> change = new ArrayList<Double>();
     private Timer time;
     public String filename;
-    String filepath = "./src/graph/watchlist/lists/";
+    String filepath = "./graph/watchlist/lists/";
 
 
     //Watchlist must be init with a text file that has a list of tickers seprated by newlines.
