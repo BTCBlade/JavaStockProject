@@ -5,11 +5,14 @@ import javax.swing.*;
         import java.awt.*;
         import java.awt.event.*;
         import java.awt.geom.Line2D;
+import java.io.IOException;
 import java.text.DateFormat;
-        import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.awt.image.*;
         import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by klongrich on 2/23/17.
@@ -18,6 +21,8 @@ import java.text.DateFormat;
 import data.qoutes;
         import graph.Scanner.scannerbox;
 import graph.watchlist.watchlistbox;
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
 public class Graph extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
@@ -628,6 +633,21 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.fillRect(740, 0, 1, h);
             g.fillRect(918, 0, 1, h);
 
+
+            g.setColor(Color.white);
+            try {
+                Stock stocks = YahooFinance.get(tick);
+                g.drawString("Ticker: " + tick, 40, y);
+                g.drawString("Current Price: " + stocks.getQuote().getPrice(), 180, y);
+                g.drawString("Bid " + stocks.getQuote().getBid() , 375, y);
+                g.drawString("Ask: " + stocks.getQuote().getAsk() , 490, y);
+                g.drawString("Volume: " + NumberFormat.getNumberInstance(Locale.US).format(stocks.getQuote().getVolume()), 585, y);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            /*
             g.setColor(Color.white);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 13));
             g.drawString("Ticker: " + tick, 40, y);
@@ -635,6 +655,7 @@ public class Graph extends JFrame implements ActionListener, MouseListener, Mous
             g.drawString("Bid: x18" , 375, y);
             g.drawString("Ask: x7" , 490, y);
             g.drawString("Volume: 71,417,714" , 585, y);
+            */
 
             g.setColor(Color.black);
             g.fillRect(840, 50, 70, 450);
